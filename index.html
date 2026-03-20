@@ -3,132 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Téléchargements - Spy game</title>
+  <title>Téléchargements du Jeu</title>
   <link rel="icon" href="https://images.icon-icons.com/4029/PNG/512/twitter_x_new_logo_x_rounded_icon_256078.png" type="image/png">
   <style>
+    /* UI INTACTE - Style conservé selon ta demande */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f2f5;
-      color: #2c3e50;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #2c3e50; padding: 15px; display: flex; flex-direction: column; align-items: center; }
     h1 { text-align: center; margin: 20px 0; font-size: 2em; color: #34495e; }
     h2 { width: 100%; max-width: 800px; font-size: 1.4em; color: #34495e; margin: 30px 0 15px; border-bottom: 2px solid #2980b9; padding-bottom: 8px; }
     p { margin-bottom: 20px; text-align: center; max-width: 600px; }
-
-    ul {
-      list-style: none;
-      width: 100%;
-      max-width: 800px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    li {
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .game-info { flex: 1 1 100%; display: flex; align-items: center; gap: 10px; }
-    .platform-tag {
-      font-size: 0.7em;
-      background: #34495e;
-      color: white;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-weight: bold;
-    }
-
+    ul { list-style: none; width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 15px; }
+    li { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 15px; }
+    .game-info { flex: 1 1 100%; display: flex; align-items: center; gap: 10px; font-weight: bold; }
+    .platform-tag { font-size: 0.7em; background: #34495e; color: white; padding: 3px 10px; border-radius: 20px; }
     .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
-    
-    .btn {
-      padding: 10px 18px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 0.9em;
-      transition: 0.3s;
-      text-align: center;
-    }
-
-    .btn-main { background: #2980b9; color: #fff; border: 2px solid #2980b9; }
+    .btn { padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.9em; transition: 0.3s; text-align: center; border: 2px solid #2980b9; }
+    .btn-main { background: #2980b9; color: #fff; }
     .btn-main:hover { background: #1abc9c; border-color: #1abc9c; }
-
-    .btn-old { background: transparent; color: #2980b9; border: 2px solid #2980b9; }
+    .btn-old { background: transparent; color: #2980b9; }
     .btn-old:hover { background: #2980b9; color: #fff; }
-
-    .rules-card {
-      background: white;
-      border-left: 5px solid #e74c3c;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 600px;
-      width: 100%;
-      margin: 20px 0;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-
-    #reviewForm {
-      width: 100%;
-      max-width: 600px;
-      background: white;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 20px;
-    }
-    #reviewForm input, #reviewForm textarea {
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-    }
-    #reviewForm button {
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      background: #2c3e50;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    @media (max-width: 600px) {
-      li { flex-direction: column; align-items: stretch; }
-      .btn-group { flex-direction: column; }
-      .btn { width: 100%; }
-    }
+    .rules-card { background: white; border-left: 5px solid #e74c3c; padding: 20px; border-radius: 10px; max-width: 600px; width: 100%; margin: 20px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    #reviewForm { width: 100%; max-width: 600px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 12px; }
+    #reviewForm input, #reviewForm textarea { padding: 12px; border-radius: 8px; border: 1px solid #ddd; }
+    #reviewForm button { padding: 12px; border-radius: 8px; border: none; background: #2c3e50; color: white; font-weight: bold; cursor: pointer; }
+    @media (max-width: 600px) { li { flex-direction: column; align-items: stretch; } .btn-group { flex-direction: column; } .btn { width: 100%; } }
   </style>
 </head>
 <body>
 
-<h1>Téléchargements de SpyGame</h1>
+<script>
+  // ==========================================
+  // CONFIGURATION DES TRAJETS ET NOMS
+  // ==========================================
+  const CONFIG = {
+    // Liens Windows
+    windows: {
+      nom: "Jeu Complet (PC)",
+      derniere: "versions/windows/latest/game_v2.0.zip",
+      archives: "archives_win.html"
+    },
+    // Liens Linux
+    linux: {
+      nom: "Jeu Complet (Linux)",
+      derniere: "versions/linux/latest/game_v2.0.tar.gz",
+      archives: "archives_linux.html"
+    },
+    // Liens Android
+    android: {
+      nom: "Version Mobile (APK)",
+      derniere: "versions/android/latest/game_mobile.apk",
+      archives: "archives_android.html"
+    },
+    // Webhook Discord
+    webhook: "https://discord.com/api/webhooks/1484636718325039164/3i1nNnt-qsuefaRujtrXEAaDywbXrL293c0UvatufwGy6O5r0-lRGZQxzv_RwzN-Rrqy"
+  };
+</script>
+
+<h1>Téléchargements du Jeu</h1>
 <p>Choisis ta plateforme et accède à la version de ton choix.</p>
 
 <h2>Windows</h2>
 <ul>
   <li>
     <div class="game-info">
-      <strong>Jeu Complet</strong> <span class="platform-tag">PC</span>
+      <span id="win-name"></span> <span class="platform-tag">Win</span>
     </div>
     <div class="btn-group">
-      <a href="versions/windows/latest/game_v2.0.zip" class="btn btn-main" download>Dernière Version</a>
-      <a href="archives_win.html" class="btn btn-old">Anciennes Versions</a>
+      <a id="win-latest" href="#" class="btn btn-main" download>Dernière Version</a>
+      <a id="win-old" href="#" class="btn btn-old">Anciennes Versions</a>
     </div>
   </li>
 </ul>
@@ -137,11 +79,11 @@
 <ul>
   <li>
     <div class="game-info">
-      <strong>Jeu Complet</strong> <span class="platform-tag">Linux</span>
+      <span id="linux-name"></span> <span class="platform-tag">Linux</span>
     </div>
     <div class="btn-group">
-      <a href="versions/linux/latest/game_v2.0.tar.gz" class="btn btn-main" download>Dernière Version</a>
-      <a href="archives_linux.html" class="btn btn-old">Anciennes Versions</a>
+      <a id="linux-latest" href="#" class="btn btn-main" download>Dernière Version</a>
+      <a id="linux-old" href="#" class="btn btn-old">Anciennes Versions</a>
     </div>
   </li>
 </ul>
@@ -150,11 +92,11 @@
 <ul>
   <li>
     <div class="game-info">
-      <strong>Version Mobile</strong> <span class="platform-tag">APK</span>
+      <span id="android-name"></span> <span class="platform-tag">APK</span>
     </div>
     <div class="btn-group">
-      <a href="versions/android/latest/game_mobile.apk" class="btn btn-main" download>Dernière Version</a>
-      <a href="archives_android.html" class="btn btn-old">Anciennes Versions</a>
+      <a id="android-latest" href="#" class="btn btn-main" download>Dernière Version</a>
+      <a id="android-old" href="#" class="btn btn-old">Anciennes Versions</a>
     </div>
   </li>
 </ul>
@@ -167,7 +109,7 @@
 
 <h2>Un retour sur le jeu ?</h2>
 <form id="reviewForm">
-  <input type="text" id="addonName" placeholder="Ta version (ex: Windows v2)" required>
+  <input type="text" id="versionName" placeholder="Ta version (ex: Windows v2)" required>
   <textarea id="reviewMessage" placeholder="Ton avis ou un bug trouvé..." rows="4" required></textarea>
   <button type="submit">Envoyer mon avis</button>
   <p id="status" style="text-align:center; font-weight:bold; margin-top:10px;"></p>
@@ -178,30 +120,42 @@
 </div>
 
 <script>
-const webhookURL = "https://discord.com/api/webhooks/1484636718325039164/3i1nNnt-qsuefaRujtrXEAaDywbXrL293c0UvatufwGy6O5r0-lRGZQxzv_RwzN-Rrqy";
+  // Initialisation automatique des liens depuis la CONFIG
+  document.getElementById('win-name').innerText = CONFIG.windows.nom;
+  document.getElementById('win-latest').href = CONFIG.windows.derniere;
+  document.getElementById('win-old').href = CONFIG.windows.archives;
 
-document.getElementById("reviewForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const name = document.getElementById("addonName").value;
-  const msg = document.getElementById("reviewMessage").value;
-  const status = document.getElementById("status");
+  document.getElementById('linux-name').innerText = CONFIG.linux.nom;
+  document.getElementById('linux-latest').href = CONFIG.linux.derniere;
+  document.getElementById('linux-old').href = CONFIG.linux.archives;
 
-  status.innerText = "Envoi...";
+  document.getElementById('android-name').innerText = CONFIG.android.nom;
+  document.getElementById('android-latest').href = CONFIG.android.derniere;
+  document.getElementById('android-old').href = CONFIG.android.archives;
 
-  fetch(webhookURL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content: `🎮 **Feedback Jeu**\n**Version:** ${name}\n**Message:** ${msg}` })
-  })
-  .then(res => {
-    if(res.ok) {
-      status.innerText = "✅ Merci pour ton retour !";
-      document.getElementById("reviewForm").reset();
-    } else {
-      status.innerText = "❌ Erreur d'envoi.";
-    }
+  // Gestion du formulaire
+  document.getElementById("reviewForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const name = document.getElementById("versionName").value;
+    const msg = document.getElementById("reviewMessage").value;
+    const status = document.getElementById("status");
+
+    status.innerText = "Envoi...";
+
+    fetch(CONFIG.webhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: `🎮 **Feedback Jeu**\n**Version:** ${name}\n**Message:** ${msg}` })
+    })
+    .then(res => {
+      if(res.ok) {
+        status.innerText = "✅ Merci pour ton retour !";
+        document.getElementById("reviewForm").reset();
+      } else {
+        status.innerText = "❌ Erreur d'envoi.";
+      }
+    });
   });
-});
 </script>
 
 </body>
