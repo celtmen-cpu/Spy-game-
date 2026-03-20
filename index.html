@@ -1,143 +1,183 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Blender Resources</title>
+  <title>Mes Ressources Blender</title>
   <link rel="icon" href="https://images.icon-icons.com/4029/PNG/512/twitter_x_new_logo_x_rounded_icon_256078.png" type="image/png">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f0f2f5;
       color: #2c3e50;
-      padding: 20px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      line-height: 1.6;
     }
-    h1 { text-align: center; margin-bottom: 20px; font-size: 2em; color: #34495e; }
-    h2 { width: 100%; font-size: 1.4em; color: #34495e; margin: 30px 0 15px; border-bottom: 2px solid #2980b9; padding-bottom: 5px; }
-    p { margin: 10px 0 20px; text-align: center; }
-    a { text-decoration: none; color: #2980b9; font-weight: bold; transition: 0.3s; }
-    a:hover { color: #1abc9c; }
-
+    h1 { text-align: center; margin: 20px 0; font-size: 1.8em; color: #34495e; }
+    h2 { width: 100%; max-width: 800px; font-size: 1.3em; color: #34495e; margin: 25px 0 15px; border-bottom: 2px solid #2980b9; padding-bottom: 5px; }
+    p { margin: 10px 0 20px; text-align: center; max-width: 600px; }
+    
     ul {
       list-style: none;
       width: 100%;
+      max-width: 800px;
       padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 12px;
     }
     li {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 15px 20px;
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      transition: 0.3s;
-      flex-wrap: wrap;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: 0.3s ease;
     }
-    li:hover { background: rgba(255, 255, 255, 0.35); transform: translateY(-2px); }
-    .addon-name { font-size: 1em; margin-bottom: 5px; flex: 1 1 60%; }
+    li:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.6); }
+
+    .addon-name { font-weight: 500; display: flex; align-items: center; gap: 8px; flex: 1; }
+    
+    .platform-tag {
+      font-size: 0.75em;
+      background: #34495e;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
     .download-btn {
       background: #2980b9;
       color: #fff;
-      padding: 8px 12px;
+      padding: 8px 16px;
       border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9em;
       transition: 0.3s;
+      white-space: nowrap;
     }
     .download-btn:hover { background: #1abc9c; }
 
-    .social { display: flex; align-items: center; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-    .social img { width: 30px; height: auto; }
+    .rules-card {
+      background: linear-gradient(135deg, rgba(41, 128, 185, 0.1), rgba(26, 188, 156, 0.1));
+      backdrop-filter: blur(10px);
+      border: 1px dashed #2980b9;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      margin: 10px 0;
+    }
 
-    /* Review form */
     #reviewForm {
       width: 100%;
       max-width: 600px;
-      background: rgba(255,255,255,0.25);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
+      background: white;
       padding: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
+      gap: 12px;
     }
     #reviewForm input, #reviewForm textarea {
-      width: 100%;
-      padding: 10px;
+      padding: 12px;
       border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1em;
+      border: 1px solid #ddd;
+      outline: none;
     }
     #reviewForm button {
-      width: fit-content;
-      padding: 10px 15px;
+      padding: 12px;
       border-radius: 8px;
       border: none;
-      background: #2980b9;
+      background: #2c3e50;
       color: white;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
     }
-    #reviewForm button:hover { background: #1abc9c; }
-    #status { margin-top: 10px; text-align: center; font-weight: bold; }
 
-    @media (max-width: 600px) {
-      li { flex-direction: column; align-items: flex-start; }
-      .addon-name { flex: 1 1 100%; margin-bottom: 10px; }
+    .social { display: flex; align-items: center; gap: 10px; margin: 20px 0; }
+    .social img { width: 24px; }
+
+    /* Adaptations Mobile */
+    @media (max-width: 480px) {
+      li { flex-direction: column; text-align: center; gap: 10px; }
+      .addon-name { flex-direction: column; }
+      .download-btn { width: 100%; }
+      h1 { font-size: 1.5em; }
     }
   </style>
 </head>
 <body>
 
-<h1>My Blender Resources</h1>
-<p>Download my Blender themes and addons below.</p>
+<h1>Mes Ressources Blender</h1>
+<p>Téléchargez mes thèmes et addons optimisés pour chaque plateforme.</p>
 
-<h2>Themes</h2>
+<h2>Versions Windows</h2>
 <ul>
   <li>
-    <div class="addon-name">MacOS Dark Liquid Glass Theme</div>
-    <a href="versions/theme/liquid_glass_theme_1.0.zip" class="download-btn" download>Download</a>
+    <div class="addon-name">Thème Liquid Glass <span class="platform-tag">Win</span></div>
+    <a href="versions/windows/theme/liquid_glass_theme_1.0.zip" class="download-btn" download>Télécharger</a>
+  </li>
+  <li>
+    <div class="addon-name">Presets de Dimensions <span class="platform-tag">Win</span></div>
+    <a href="versions/windows/addons/dimensions_presets.zip" class="download-btn" download>Télécharger</a>
   </li>
 </ul>
 
-<h2>Addons</h2>
+<h2>Versions Linux</h2>
 <ul>
   <li>
-    <div class="addon-name">Dimension presets for social networks</div>
-    <a href="versions/addons/dimensions_presets.zip" class="download-btn" download>Download</a>
+    <div class="addon-name">Thème Liquid Glass <span class="platform-tag">Linux</span></div>
+    <a href="versions/linux/theme/liquid_glass_theme_1.0.zip" class="download-btn" download>Télécharger</a>
+  </li>
+  <li>
+    <div class="addon-name">Presets de Dimensions <span class="platform-tag">Linux</span></div>
+    <a href="versions/linux/addons/dimensions_presets.zip" class="download-btn" download>Télécharger</a>
   </li>
 </ul>
 
-<h2>Installation</h2>
-<p>Follow the Blender installation instructions:</p>
-<p>
-  <a href="https://docs.blender.org/manual/en/latest/editors/preferences/addons.html" target="_blank" class="download-btn">
-    Blender Installation Guide
-  </a>
-</p>
+<h2>Versions Android</h2>
+<ul>
+  <li>
+    <div class="addon-name">Liquid Glass Mobile <span class="platform-tag">Android</span></div>
+    <a href="versions/android/theme/liquid_glass_mobile.zip" class="download-btn" download>Télécharger</a>
+  </li>
+  <li>
+    <div class="addon-name">Presets Tactiles <span class="platform-tag">Android</span></div>
+    <a href="versions/android/addons/dimensions_presets_mobile.zip" class="download-btn" download>Télécharger</a>
+  </li>
+</ul>
 
-<h2>Leave a Review</h2>
+<h2>Conditions d'utilisation</h2>
+<div class="rules-card">
+  <p>🤫 <strong>Confidentialité :</strong> Ce script et ses ressources doivent rester <strong>secrets</strong>.</p>
+  <p>🎮 <strong>Obligation :</strong> La seule règle est que tu dois <strong>t'amuser</strong> avec !</p>
+</div>
+
+<h2>Laisser un avis</h2>
 <form id="reviewForm">
-  <input type="text" id="addonName" placeholder="Addon or Theme Name" required>
-  <textarea id="reviewMessage" placeholder="Your comment" rows="5" required></textarea>
-  <button type="submit">Send Review</button>
+  <input type="text" id="addonName" placeholder="Nom de l'Addon ou du Thème" required>
+  <textarea id="reviewMessage" placeholder="Votre commentaire..." rows="4" required></textarea>
+  <button type="submit">Envoyer l'avis</button>
   <p id="status"></p>
 </form>
 
-<h2>My Social Networks</h2>
 <div class="social">
-  <img src="https://images.icon-icons.com/4029/PNG/512/twitter_x_new_logo_x_rounded_icon_256078.png" alt="X Logo">
-  <a href="https://x.com/hvk_celtmen?s=21" target="_blank">My X profile</a>
+  <img src="https://images.icon-icons.com/4029/PNG/512/twitter_x_new_logo_x_rounded_icon_256078.png" alt="X">
+  <a href="https://x.com/hvk_celtmen?s=21" target="_blank">Mon profil X (Twitter)</a>
 </div>
 
 <script>
@@ -147,24 +187,27 @@ document.getElementById("reviewForm").addEventListener("submit", function(e) {
   e.preventDefault();
   const addonName = document.getElementById("addonName").value;
   const message = document.getElementById("reviewMessage").value;
+  const status = document.getElementById("status");
+
+  status.innerText = "Envoi en cours...";
 
   fetch(webhookURL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      content: `**${addonName}** received a review:\n${message}`
+      content: `📢 **Nouvel avis sur ${addonName}** :\n> ${message}`
     })
   })
   .then(res => {
     if(res.ok){
-      document.getElementById("status").innerText = "✅ Review sent!";
+      status.innerText = "✅ Avis envoyé avec succès !";
       document.getElementById("reviewForm").reset();
     } else {
-      document.getElementById("status").innerText = "❌ Failed to send review.";
+      status.innerText = "❌ Erreur lors de l'envoi.";
     }
   })
   .catch(err => {
-    document.getElementById("status").innerText = "❌ Error sending review.";
+    status.innerText = "❌ Erreur de connexion.";
     console.error(err);
   });
 });
