@@ -3,100 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mes Ressources Blender</title>
+  <title>Téléchargements - My Game</title>
   <link rel="icon" href="https://images.icon-icons.com/4029/PNG/512/twitter_x_new_logo_x_rounded_icon_256078.png" type="image/png">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background: #f0f2f5;
       color: #2c3e50;
       padding: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      line-height: 1.6;
     }
-    h1 { text-align: center; margin: 20px 0; font-size: 1.8em; color: #34495e; }
-    h2 { width: 100%; max-width: 800px; font-size: 1.3em; color: #34495e; margin: 25px 0 15px; border-bottom: 2px solid #2980b9; padding-bottom: 5px; }
-    p { margin: 10px 0 20px; text-align: center; max-width: 600px; }
-    
+    h1 { text-align: center; margin: 20px 0; font-size: 2em; color: #34495e; }
+    h2 { width: 100%; max-width: 800px; font-size: 1.4em; color: #34495e; margin: 30px 0 15px; border-bottom: 2px solid #2980b9; padding-bottom: 8px; }
+    p { margin-bottom: 20px; text-align: center; max-width: 600px; }
+
     ul {
       list-style: none;
       width: 100%;
       max-width: 800px;
-      padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 15px;
     }
     li {
       background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 12px;
-      padding: 15px;
+      border-radius: 15px;
+      padding: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      transition: 0.3s ease;
+      flex-wrap: wrap;
+      gap: 15px;
     }
-    li:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.6); }
 
-    .addon-name { font-weight: 500; display: flex; align-items: center; gap: 8px; flex: 1; }
-    
+    .game-info { flex: 1 1 100%; display: flex; align-items: center; gap: 10px; }
     .platform-tag {
-      font-size: 0.75em;
+      font-size: 0.7em;
       background: #34495e;
       color: white;
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: 20px;
-      text-transform: uppercase;
+      font-weight: bold;
     }
 
-    .download-btn {
-      background: #2980b9;
-      color: #fff;
-      padding: 8px 16px;
+    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    
+    .btn {
+      padding: 10px 18px;
       border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
       font-size: 0.9em;
       transition: 0.3s;
-      white-space: nowrap;
+      text-align: center;
     }
-    .download-btn:hover { background: #1abc9c; }
+
+    .btn-main { background: #2980b9; color: #fff; border: 2px solid #2980b9; }
+    .btn-main:hover { background: #1abc9c; border-color: #1abc9c; }
+
+    .btn-old { background: transparent; color: #2980b9; border: 2px solid #2980b9; }
+    .btn-old:hover { background: #2980b9; color: #fff; }
 
     .rules-card {
-      background: linear-gradient(135deg, rgba(41, 128, 185, 0.1), rgba(26, 188, 156, 0.1));
-      backdrop-filter: blur(10px);
-      border: 1px dashed #2980b9;
+      background: white;
+      border-left: 5px solid #e74c3c;
       padding: 20px;
-      border-radius: 15px;
+      border-radius: 10px;
       max-width: 600px;
       width: 100%;
-      text-align: center;
-      margin: 10px 0;
+      margin: 20px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
     #reviewForm {
       width: 100%;
       max-width: 600px;
       background: white;
-      padding: 20px;
+      padding: 25px;
       border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
       gap: 12px;
+      margin-top: 20px;
     }
     #reviewForm input, #reviewForm textarea {
       padding: 12px;
       border-radius: 8px;
       border: 1px solid #ddd;
-      outline: none;
     }
     #reviewForm button {
       padding: 12px;
@@ -108,76 +108,73 @@
       cursor: pointer;
     }
 
-    .social { display: flex; align-items: center; gap: 10px; margin: 20px 0; }
-    .social img { width: 24px; }
-
-    /* Adaptations Mobile */
-    @media (max-width: 480px) {
-      li { flex-direction: column; text-align: center; gap: 10px; }
-      .addon-name { flex-direction: column; }
-      .download-btn { width: 100%; }
-      h1 { font-size: 1.5em; }
+    @media (max-width: 600px) {
+      li { flex-direction: column; align-items: stretch; }
+      .btn-group { flex-direction: column; }
+      .btn { width: 100%; }
     }
   </style>
 </head>
 <body>
 
-<h1>Mes Ressources Blender</h1>
-<p>Téléchargez mes thèmes et addons optimisés pour chaque plateforme.</p>
+<h1>Téléchargements du Jeu</h1>
+<p>Choisis ta plateforme et accède à la version de ton choix.</p>
 
-<h2>Versions Windows</h2>
+<h2>Windows</h2>
 <ul>
   <li>
-    <div class="addon-name">Thème Liquid Glass <span class="platform-tag">Win</span></div>
-    <a href="versions/windows/theme/liquid_glass_theme_1.0.zip" class="download-btn" download>Télécharger</a>
-  </li>
-  <li>
-    <div class="addon-name">Presets de Dimensions <span class="platform-tag">Win</span></div>
-    <a href="versions/windows/addons/dimensions_presets.zip" class="download-btn" download>Télécharger</a>
+    <div class="game-info">
+      <strong>Jeu Complet</strong> <span class="platform-tag">PC</span>
+    </div>
+    <div class="btn-group">
+      <a href="versions/windows/latest/game_v2.0.zip" class="btn btn-main" download>Dernière Version</a>
+      <a href="archives_win.html" class="btn btn-old">Anciennes Versions</a>
+    </div>
   </li>
 </ul>
 
-<h2>Versions Linux</h2>
+<h2>Linux</h2>
 <ul>
   <li>
-    <div class="addon-name">Thème Liquid Glass <span class="platform-tag">Linux</span></div>
-    <a href="versions/linux/theme/liquid_glass_theme_1.0.zip" class="download-btn" download>Télécharger</a>
-  </li>
-  <li>
-    <div class="addon-name">Presets de Dimensions <span class="platform-tag">Linux</span></div>
-    <a href="versions/linux/addons/dimensions_presets.zip" class="download-btn" download>Télécharger</a>
+    <div class="game-info">
+      <strong>Jeu Complet</strong> <span class="platform-tag">Linux</span>
+    </div>
+    <div class="btn-group">
+      <a href="versions/linux/latest/game_v2.0.tar.gz" class="btn btn-main" download>Dernière Version</a>
+      <a href="archives_linux.html" class="btn btn-old">Anciennes Versions</a>
+    </div>
   </li>
 </ul>
 
-<h2>Versions Android</h2>
+<h2>Android</h2>
 <ul>
   <li>
-    <div class="addon-name">Liquid Glass Mobile <span class="platform-tag">Android</span></div>
-    <a href="versions/android/theme/liquid_glass_mobile.zip" class="download-btn" download>Télécharger</a>
-  </li>
-  <li>
-    <div class="addon-name">Presets Tactiles <span class="platform-tag">Android</span></div>
-    <a href="versions/android/addons/dimensions_presets_mobile.zip" class="download-btn" download>Télécharger</a>
+    <div class="game-info">
+      <strong>Version Mobile</strong> <span class="platform-tag">APK</span>
+    </div>
+    <div class="btn-group">
+      <a href="versions/android/latest/game_mobile.apk" class="btn btn-main" download>Dernière Version</a>
+      <a href="archives_android.html" class="btn btn-old">Anciennes Versions</a>
+    </div>
   </li>
 </ul>
 
 <h2>Conditions d'utilisation</h2>
 <div class="rules-card">
-  <p>🤫 <strong>Confidentialité :</strong> Ce script et ses ressources doivent rester <strong>secrets</strong>.</p>
-  <p>🎮 <strong>Obligation :</strong> La seule règle est que tu dois <strong>t'amuser</strong> avec !</p>
+  <p>🤫 <strong>SECRET :</strong> Ce projet est confidentiel, merci de ne pas partager ce lien.</p>
+  <p>🎉 <strong>FUN :</strong> L'unique but est de s'amuser avec le script !</p>
 </div>
 
-<h2>Laisser un avis</h2>
+<h2>Un retour sur le jeu ?</h2>
 <form id="reviewForm">
-  <input type="text" id="addonName" placeholder="Nom de l'Addon ou du Thème" required>
-  <textarea id="reviewMessage" placeholder="Votre commentaire..." rows="4" required></textarea>
-  <button type="submit">Envoyer l'avis</button>
-  <p id="status"></p>
+  <input type="text" id="addonName" placeholder="Ta version (ex: Windows v2)" required>
+  <textarea id="reviewMessage" placeholder="Ton avis ou un bug trouvé..." rows="4" required></textarea>
+  <button type="submit">Envoyer mon avis</button>
+  <p id="status" style="text-align:center; font-weight:bold; margin-top:10px;"></p>
 </form>
 
-<div class="social">
-  <img src="https://images.icon-icons.com/4029/PNG/512/twitter_x_new_logo_x_rounded_icon_256078.png" alt="X">
-  <a href="https://x.com/hvk_celtmen?s=21" target="_blank">Mon profil X (Twitter)</a>
+<div style="margin-top: 30px;">
+  <a href="https://x.com/hvk_celtmen?s=21" target="_blank" style="text-decoration:none; color:#2980b9; font-weight:bold;">Suivre sur X (Twitter)</a>
 </div>
 
 <script>
@@ -185,30 +182,24 @@ const webhookURL = "https://discord.com/api/webhooks/1484636718325039164/3i1nNnt
 
 document.getElementById("reviewForm").addEventListener("submit", function(e) {
   e.preventDefault();
-  const addonName = document.getElementById("addonName").value;
-  const message = document.getElementById("reviewMessage").value;
+  const name = document.getElementById("addonName").value;
+  const msg = document.getElementById("reviewMessage").value;
   const status = document.getElementById("status");
 
-  status.innerText = "Envoi en cours...";
+  status.innerText = "Envoi...";
 
   fetch(webhookURL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      content: `📢 **Nouvel avis sur ${addonName}** :\n> ${message}`
-    })
+    body: JSON.stringify({ content: `🎮 **Feedback Jeu**\n**Version:** ${name}\n**Message:** ${msg}` })
   })
   .then(res => {
-    if(res.ok){
-      status.innerText = "✅ Avis envoyé avec succès !";
+    if(res.ok) {
+      status.innerText = "✅ Merci pour ton retour !";
       document.getElementById("reviewForm").reset();
     } else {
-      status.innerText = "❌ Erreur lors de l'envoi.";
+      status.innerText = "❌ Erreur d'envoi.";
     }
-  })
-  .catch(err => {
-    status.innerText = "❌ Erreur de connexion.";
-    console.error(err);
   });
 });
 </script>
