@@ -6,7 +6,6 @@
   <title>Spy Game - Téléchargements</title>
   <link rel="icon" href="https://images.icon-icons.com/4029/PNG/512/twitter_x_new_logo_x_rounded_icon_256078.png" type="image/png">
   <style>
-    /* UI INTACTE - Design conservé */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #2c3e50; padding: 15px; display: flex; flex-direction: column; align-items: center; }
     h1 { text-align: center; margin: 20px 0; font-size: 2.2em; color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; }
@@ -35,32 +34,21 @@
   const CONFIG = {
     nomDuJeu: "Spy Game",
     platforms: {
-      windows: {
-        label: "Spy Game pour Windows",
-        lien: "versions/windows/SpyGame_v1.zip"
-      },
-      linux: {
-        label: "Spy Game pour Linux",
-        lien: "versions/linux/SpyGame_v1.tar.gz"
-      },
-      android: {
-        label: "Spy Game Mobile (APK)",
-        lien: "versions/android/SpyGame.apk"
-      }
+      windows: { label: "Spy Game pour Windows", lien: "versions/windows/SpyGame_v1.zip" },
+      linux: { label: "Spy Game pour Linux", lien: "versions/linux/SpyGame_v1.tar.gz" },
+      android: { label: "Spy Game Mobile (APK)", lien: "versions/android/SpyGame.apk" }
     },
     webhook: "https://discord.com/api/webhooks/1484636718325039164/3i1nNnt-qsuefaRujtrXEAaDywbXrL293c0UvatufwGy6O5r0-lRGZQxzv_RwzN-Rrqy"
   };
 </script>
 
 <h1 id="main-title"></h1>
-<p>Téléchargez la dernière version officielle de <strong>Spy Game</strong> pour votre appareil.</p>
+<p>Téléchargez la dernière version officielle de <strong>Spy Game</strong>.</p>
 
 <h2>Windows</h2>
 <ul>
   <li>
-    <div class="game-info">
-      <span id="win-label"></span> <span class="platform-tag">PC</span>
-    </div>
+    <div class="game-info"><span id="win-label"></span> <span class="platform-tag">PC</span></div>
     <a id="win-link" href="#" class="btn" download>Télécharger</a>
   </li>
 </ul>
@@ -68,9 +56,7 @@
 <h2>Linux</h2>
 <ul>
   <li>
-    <div class="game-info">
-      <span id="linux-label"></span> <span class="platform-tag">Linux</span>
-    </div>
+    <div class="game-info"><span id="linux-label"></span> <span class="platform-tag">Linux</span></div>
     <a id="linux-link" href="#" class="btn" download>Télécharger</a>
   </li>
 </ul>
@@ -78,17 +64,15 @@
 <h2>Android</h2>
 <ul>
   <li>
-    <div class="game-info">
-      <span id="android-label"></span> <span class="platform-tag">APK</span>
-    </div>
+    <div class="game-info"><span id="android-label"></span> <span class="platform-tag">APK</span></div>
     <a id="android-link" href="#" class="btn" download>Télécharger</a>
   </li>
 </ul>
 
 <h2>Conditions d'utilisation</h2>
 <div class="rules-card">
-  <p>🤫 <strong>SECRET :</strong> Ce projet est confidentiel, merci de ne pas partager ce lien.</p>
-  <p>🎉 <strong>FUN :</strong> L'unique but est de s'amuser avec le script !</p>
+  <p>🤫 <strong>CONFIDENTIALITÉ :</strong> Ce projet est strictement confidentiel. Il est interdit de partager ce lien ou l'application.</p>
+  <p>🎮 <strong>AMUSEMENT :</strong> La règle principale est de s'amuser au maximum avec le jeu !</p>
 </div>
 
 <h2>Un retour sur Spy Game ?</h2>
@@ -99,49 +83,32 @@
   <p id="status" style="text-align:center; font-weight:bold; margin-top:10px;"></p>
 </form>
 
-<div style="margin-top: 30px;">
-  <a href="https://x.com/hvk_celtmen?s=21" target="_blank" style="text-decoration:none; color:#2980b9; font-weight:bold;">Suivre sur X (Twitter)</a>
-</div>
-
 <script>
-  // Initialisation dynamique
   document.getElementById('main-title').innerText = CONFIG.nomDuJeu;
-  
-  // Windows
   document.getElementById('win-label').innerText = CONFIG.platforms.windows.label;
   document.getElementById('win-link').href = CONFIG.platforms.windows.lien;
-
-  // Linux
   document.getElementById('linux-label').innerText = CONFIG.platforms.linux.label;
   document.getElementById('linux-link').href = CONFIG.platforms.linux.lien;
-
-  // Android
   document.getElementById('android-label').innerText = CONFIG.platforms.android.label;
   document.getElementById('android-link').href = CONFIG.platforms.android.lien;
 
-  // Webhook Logic
   document.getElementById("reviewForm").addEventListener("submit", function(e) {
     e.preventDefault();
     const platform = document.getElementById("versionInfo").value;
     const msg = document.getElementById("reviewMessage").value;
     const status = document.getElementById("status");
-
     status.innerText = "Envoi en cours...";
 
     fetch(CONFIG.webhook, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        content: `🕵️‍♂️ **Feedback Spy Game**\n**Plateforme:** ${platform}\n**Message:** ${msg}` 
-      })
+      body: JSON.stringify({ content: `🕵️‍♂️ **Feedback Spy Game**\n**Plateforme:** ${platform}\n**Message:** ${msg}` })
     })
     .then(res => {
       if(res.ok) {
         status.innerText = "✅ Feedback envoyé !";
         document.getElementById("reviewForm").reset();
-      } else {
-        status.innerText = "❌ Erreur d'envoi.";
-      }
+      } else { status.innerText = "❌ Erreur d'envoi."; }
     });
   });
 </script>
