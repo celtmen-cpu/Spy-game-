@@ -3,167 +3,355 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spy Game - Accès Privé</title>
+  <title>Spy Game :: Network Access Terminal :: Restricted Area</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+    :root {
+      --neon-cyan: #00f2ff;
+      --neon-purple: #bc13fe;
+      --bg-dark: #05070a;
+      --card-bg: rgba(10, 15, 25, 0.9);
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-      background-color: #f5f5f5; 
-      color: #333; 
+      font-family: 'Space Grotesk', sans-serif; 
+      background: var(--bg-dark); 
+      color: var(--text-main); 
+      min-height: 100vh;
       display: flex; 
       flex-direction: column; 
       align-items: center;
-      padding: 50px 20px;
+      padding: 60px 20px;
+      overflow-x: hidden;
+      /* Effet de grain de fond Cyber */
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 50%),
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+      background-size: 100% 100%, 100% 4px;
     }
 
-    .container {
+    /* Conteneur principal Glassmorphism */
+    .terminal-container {
       width: 100%;
-      max-width: 600px;
-      background: #ffffff;
-      padding: 30px;
-      border: 1px solid #ddd;
+      max-width: 850px;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 242, 255, 0.1);
+      border-radius: 4px; 
+      padding: 40px; 
+      box-shadow: 0 10px 50px rgba(0,0,0,0.5), inset 0 0 30px rgba(0, 242, 255, 0.02);
+      position: relative;
     }
 
-    h1 { font-size: 1.5rem; color: #000; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+    /* Ligne de scan Cyber en haut */
+    .terminal-container::before {
+      content: " ";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+      animation: scanline 2s linear infinite;
+    }
 
-    .alert-box { 
-      background-color: #fff3f3; 
-      border: 1px solid #ebccd1; 
-      padding: 15px; 
-      margin-bottom: 25px;
+    h1 { 
+      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 10px;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 20px rgba(0, 242, 255, 0.7);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .security-status {
+      font-family: 'JetBrains Mono', monospace;
       font-size: 0.9rem;
+      color: var(--neon-purple);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 50px;
+      text-align: center;
     }
-    .alert-box strong { color: #a94442; text-transform: uppercase; }
+    .security-status span { color: #fff; }
 
-    h2 { font-size: 1rem; color: #666; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    .section-title { 
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      color: var(--neon-purple);
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      border-left: 3px solid var(--neon-purple);
+      padding-left: 15px;
+    }
 
-    /* Téléchargements */
-    .file-row { 
+    /* Protocole de sécurité (CGU) */
+    .protocol-box { 
+      background: rgba(255, 255, 255, 0.03); 
+      padding: 25px; 
+      border-radius: 4px; 
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.95rem; 
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+    .protocol-box strong { color: #fff; }
+    .alert-text { color: #ff0055; font-weight: bold; }
+
+    /* Liste de téléchargement DYNAMIQUE */
+    #downloadList { 
+      list-style: none; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 20px; 
+      margin-bottom: 40px;
+    }
+    .dl-item { 
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 25px; 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      padding: 15px; 
-      border: 1px solid #eee; 
-      margin-bottom: 10px;
+      transition: 0.3s ease;
     }
-    .file-name { font-weight: 600; font-size: 0.95rem; }
-    .file-name span { display: block; font-size: 0.8rem; color: #999; font-weight: normal; }
+    .dl-item:hover { 
+      border-color: var(--neon-cyan); 
+      box-shadow: 0 0 20px rgba(0, 242, 255, 0.1); 
+    }
 
-    .btn { 
-      padding: 8px 16px; 
-      background-color: #333; 
-      color: #fff; 
-      text-decoration: none; 
-      font-size: 0.85rem;
-      font-weight: bold;
-      border: none;
+    .file-meta { display: flex; flex-direction: column; gap: 5px; }
+    .os-name { font-size: 1.5rem; font-weight: 700; color: #fff; letter-spacing: 1px; }
+    .file-stats { 
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; 
+      color: var(--neon-cyan); 
+    }
+
+    /* Boutons de téléchargement */
+    .btn-dl { 
+      padding: 15px 35px; 
+      background: transparent;
+      color: var(--neon-cyan);
+      border: 2px solid var(--neon-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: 0.3s;
       cursor: pointer;
     }
-    .btn:hover { background-color: #000; }
+    .btn-dl:hover { 
+      background: var(--neon-cyan); 
+      color: var(--bg-dark); 
+      box-shadow: 0 0 20px var(--neon-cyan); 
+    }
 
-    /* Formulaire Rapport */
-    form { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+    /* Formulaire Rapport (Feedback) */
+    #reviewForm { 
+      background: rgba(0, 0, 0, 0.3);
+      padding: 30px; 
+      border: 1px solid rgba(188, 19, 254, 0.1);
+      display: flex; 
+      flex-direction: column; 
+      gap: 15px; 
+    }
     input, textarea { 
-      padding: 10px; 
-      border: 1px solid #ccc; 
-      font-family: inherit; 
-      font-size: 0.9rem;
       width: 100%;
+      padding: 15px; 
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.9rem;
     }
-    .btn-submit { 
-      padding: 12px; 
-      background-color: #555; 
-      color: white; 
-      border: none; 
-      font-weight: bold; 
+    input:focus, textarea:focus { 
+      outline: none;
+      border-color: var(--neon-purple);
+      background: rgba(188, 19, 254, 0.03);
+    }
+    .submit-btn { 
+      width: 100%; 
+      background: transparent;
+      border: 1px solid var(--neon-purple);
+      color: var(--neon-purple);
+      padding: 18px; 
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700; 
       cursor: pointer; 
+      transition: 0.3s;
+      text-transform: uppercase;
     }
-    .btn-submit:hover { background-color: #333; }
+    .submit-btn:hover { 
+      background: var(--neon-purple); 
+      color: #fff; 
+      box-shadow: 0 0 20px var(--neon-purple); 
+    }
 
-    @media (max-width: 500px) { .file-row { flex-direction: column; gap: 10px; text-align: center; } }
+    /* Animations & Media Queries */
+    @keyframes scanline { 0% { transform: scaleX(0); opacity: 0; } 50% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(0); opacity: 0; } }
+    @media (max-width: 600px) { 
+        .terminal-container { padding: 25px; }
+        .dl-item { flex-direction: column; text-align: center; gap: 20px; }
+        .btn-dl { width: 100%; }
+        h1 { letter-spacing: 5px; }
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Spy Game :: Beta Terminal</h1>
+  <div class="terminal-container">
+    <h1>SPY GAME</h1>
+    <div class="security-status">System: <span>Connected</span> // Session: <span id="session-id">Restricted</span></div>
 
-    <div class="alert-box">
-      <strong>Protocole de Sécurité :</strong>
-      <p style="margin-top:5px;">Ce site et les fichiers associés sont strictement confidentiels. Il est interdit de partager ce lien ou de redistribuer le logiciel à des tiers.</p>
+    <h2 class="section-title">[01] Protocole de Confidentialité (CGU)</h2>
+    <div class="protocol-box">
+      <p>L'accès à ce terminal réseau est strictement réservé. En procédant à l'extraction des données, vous validez les protocoles suivants :</p>
+      <ul style="margin-left: 20px; margin-top: 10px; list-style: square;">
+        <li><span class="alert-text">SECRET ABSOLU :</span> Vous n'avez pas l'autorisation de donner, prêter ou vendre ce logiciel à un tiers.</li>
+        <li><span class="alert-text">LIEN SÉCURISÉ :</span> Il est formellement interdit de partager l'URL de ce site web.</li>
+        <li>Ce logiciel est une Beta privée. Toute fuite d'information sera traitée comme une violation directe du protocole d'espionnage.</li>
+      </ul>
     </div>
 
-    <h2>1. Extraire les fichiers (v0.2)</h2>
-    
-    <div class="file-row">
-      <div class="file-name">
-        Version Windows
-        <span>Fichier: windows_v0.2.zip</span>
-      </div>
-      <a href="https://github.com/celtmen-cpu/Spy-game-/releases/download/v0.2/windows_v0.2.zip" class="btn" onclick="notify('WINDOWS')">TELECHARGER</a>
-    </div>
+    <h2 class="section-title">[02] Extraction des Packs Beta (Dernière Version)</h2>
+    <ul id="downloadList">
+      <li style="text-align:center; color:var(--text-muted); font-family:'JetBrains Mono', monospace;">> Interrogation des serveurs GitHub...</li>
+    </ul>
 
-    <div class="file-row">
-      <div class="file-name">
-        Version Linux
-        <span>Fichier: Linux_v0.2.zip</span>
-      </div>
-      <a href="https://github.com/celtmen-cpu/Spy-game-/releases/download/v0.2/Linux_v0.2.zip" class="btn" onclick="notify('LINUX')">TELECHARGER</a>
-    </div>
-
-    <h2>2. Rapport de test (Anonyme)</h2>
-    <form id="reportForm">
-      <input type="text" id="ver" placeholder="Version testée (ex: Windows v0.2)" required>
-      <textarea id="msg" rows="4" placeholder="Détails du rapport ou bugs rencontrés..." required></textarea>
-      <button type="submit" class="btn-submit">Envoyer le rapport de mission</button>
+    <h2 class="section-title">[03] Rapport de Mission (Feedback v0.2)</h2>
+    <form id="reviewForm">
+      <input type="text" id="gameVersion tested" placeholder="VERSION TESTÉE (ex: Windows v0.2 Beta)" required>
+      <textarea id="userMessage" rows="4" placeholder="TRANSMETTEZ VOTRE RAPPORT DE BUG OU VOTRE ANALYSE TECHNIQUE DE LA v0.2..." required></textarea>
+      <button type="submit" class="submit-btn">Chiffrer et Transmettre</button>
     </form>
+
   </div>
 
   <script>
-    const WEB_WIN = "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp";
-    const WEB_LIN = "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj";
+    // === CONFIGURATION GITHUB ===
+    const CONFIG = {
+      user: "celtmen-cpu",
+      repo: "Spy-game-",
+      // Webhooks distincts pour Discord
+      webhooks: {
+        windows: "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp",
+        linux: "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj"
+      }
+    };
 
-    function notify(os) {
-      const url = (os === 'WINDOWS') ? WEB_WIN : WEB_LIN;
-      fetch(url, {
+    // ID de session aléatoire pour l'ambiance
+    document.getElementById('session-id').textContent = 'AGENT_' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+    // === RÉCUPÉRATION DYNAMIQUE DEPUIS GITHUB ===
+    async function loadGitHubReleases() {
+      const list = document.getElementById('downloadList');
+      
+      try {
+        // Interrogation de l'API GitHub pour la dernière release
+        const apiUrl = `https://api.github.com/repos/${CONFIG.user}/${CONFIG.repo}/releases/latest`;
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) throw new Error("Impossible de joindre les serveurs GitHub.");
+        
+        const data = await response.json();
+        list.innerHTML = ''; // On vide le message de chargement
+
+        // On parcourt les fichiers (Assets) de la release
+        data.assets.forEach(asset => {
+          let type = '';
+          let displayName = '';
+          let webhook = '';
+
+          // Identification du système (basé sur le nom du fichier)
+          // Adapte ces conditions si tes noms de fichiers changent
+          if (asset.name.toLowerCase().includes('windows')) {
+            type = 'windows';
+            displayName = 'Windows';
+            webhook = CONFIG.webhooks.windows;
+          } else if (asset.name.toLowerCase().includes('linux')) {
+            type = 'linux';
+            displayName = 'Linux';
+            webhook = CONFIG.webhooks.linux;
+          }
+
+          if (type) {
+            // Conversion de la taille en Mo
+            const sizeMb = (asset.size / (1024 * 1024)).toFixed(1);
+            
+            const li = document.createElement('li');
+            li.className = 'dl-item';
+            li.innerHTML = `
+              <div class="file-meta">
+                <span class="os-name">${displayName}</span>
+                <span class="file-stats">Package: ${asset.name} // Taille: ${sizeMb} MB // <span style="color:#fff;">Extractions: ${asset.download_count}</span></span>
+              </div>
+              <a href="${asset.browser_download_url}" class="btn-dl" onclick="notifyDiscord('${webhook}', '${displayName}')">Initialiser</a>
+            `;
+            list.appendChild(li);
+          }
+        });
+
+      } catch (error) {
+        list.innerHTML = `<li style="text-align:center; color:#ff0055;">> ERREUR RÉSEAU : ${error.message}</li>`;
+      }
+    }
+
+    // === NOTIFICATION DISCORD (Comptage clics) ===
+    function notifyDiscord(webhookUrl, platform) {
+      const data = {
+        embeds: [{
+          title: "🕵️ ALERTE BETA :: EXTRACTION",
+          description: `Un agent a initié l'extraction du package **${platform}**.`,
+          color: platform === "Windows" ? 3447003 : 15105570,
+          timestamp: new Date()
+        }]
+      };
+
+      fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          embeds: [{ 
-            title: "🕵️ Activité Beta", 
-            description: `Téléchargement initié pour : **${os}**.`, 
-            color: 3355443, 
-            timestamp: new Date() 
-          }]
-        })
+        body: JSON.stringify(data)
       });
     }
 
-    document.getElementById('reportForm').onsubmit = async (e) => {
+    // === ENVOI DU RAPPORT (Anonyme) ===
+    document.getElementById('reviewForm').onsubmit = async (e) => {
       e.preventDefault();
-      const v = document.getElementById('ver').value;
-      const m = document.getElementById('msg').value;
+      const version = document.getElementById('gameVersion tested').value;
+      const text = document.getElementById('userMessage').value;
 
-      await fetch(WEB_WIN, {
+      const reviewPayload = {
+        embeds: [{
+          title: "💬 RAPPORT DE TESTEUR ANONYME REÇU",
+          fields: [
+            { name: "Version testée", value: version, inline: true },
+            { name: "Rapport de mission", value: text }
+          ],
+          color: 0xbc13fe,
+          timestamp: new Date()
+        }]
+      };
+
+      // On envoie le rapport sur le webhook Windows par défaut
+      await fetch(CONFIG.webhooks.windows, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          embeds: [{ 
-            title: "💬 Rapport de Testeur reçu", 
-            fields: [
-              { name: "Version", value: v, inline: true },
-              { name: "Rapport", value: m }
-            ], 
-            color: 0,
-            timestamp: new Date()
-          }]
-        })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(reviewPayload)
       });
 
-      alert("Rapport transmis avec succès.");
+      alert("Rapport chiffré et transmis. Merci, Agent.");
       e.target.reset();
     };
+
+    // Lancement au chargement de la page
+    loadGitHubReleases();
   </script>
 </body>
 </html>
