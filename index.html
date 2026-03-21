@@ -56,7 +56,7 @@
     .card:hover { border-color: var(--accent); }
 
     .os-name { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 5px; }
-    .file-info { font-size: 0.85rem; color: #64748b; margin-bottom: 20px; font-family: monospace; }
+    .file-info { font-size: 0.85rem; color: #64748b; margin-bottom: 20px; font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     .btn {
       display: block; text-align: center;
@@ -85,7 +85,7 @@
 
     <div class="section">
       <h2>Versions disponibles</h2>
-      <div id="loader" style="text-align:center; font-size:0.9rem; color:#94a3b8;">Initialisation des données...</div>
+      <div id="loader" style="text-align:center; font-size:0.9rem; color:#94a3b8;">Recherche des fichiers sur les serveurs...</div>
       <div id="downloadGrid" class="download-grid"></div>
     </div>
 
@@ -93,7 +93,7 @@
       <h2>Rapport de test</h2>
       <form id="feedbackForm">
         <input type="text" id="ver" placeholder="Version testée" required>
-        <textarea id="msg" rows="4" placeholder="Rapport d'anomalie ou retour d'expérience..." required></textarea>
+        <textarea id="msg" rows="4" placeholder="Votre rapport..." required></textarea>
         <button type="submit" class="btn-submit">Envoyer le rapport</button>
       </form>
     </div>
@@ -103,10 +103,6 @@
     const CONFIG = {
       user: "celtmen-cpu",
       repo: "Spy-game-",
-      targets: { 
-        win: "windows_v0.2.zip", 
-        lin: "Linux v0.2.zip" 
-      },
       webhooks: {
         win: "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp",
         lin: "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj"
@@ -124,20 +120,25 @@
         
         let assetsFound = { win: null, lin: null };
 
+        // Scan de toutes les releases pour trouver les fichiers
         releases.forEach(rel => {
           rel.assets.forEach(asset => {
-            if (asset.name === CONFIG.targets.win) {
+            const name = asset.name.toLowerCase();
+            // Détection flexible pour Windows
+            if (name.includes('windows') && name.includes('0.2')) {
               assetsFound.win = asset;
               counts.win = asset.download_count;
             }
-            if (asset.name === CONFIG.targets.lin) {
+            // Détection flexible pour Linux (gère "Linux v0.2", "linux_v0.2", etc.)
+            if (name.includes('linux') && name.includes('0.2')) {
               assetsFound.lin = asset;
               counts.lin = asset.download_count;
             }
           });
         });
 
-        Object.keys(assetsFound).forEach(key => {
+        // Génération des cartes
+        ['win', 'lin'].forEach(key => {
           if (assetsFound[key]) {
             const data = assetsFound[key];
             const title = key === 'win' ? 'Version Windows' : 'Version Linux';
@@ -153,28 +154,30 @@
             grid.appendChild(card);
           }
         });
+
+        if (!assetsFound.win && !assetsFound.lin) {
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('loader').innerText = "Aucun fichier v0.2 trouvé sur GitHub.";
+        }
+
       } catch (e) {
-        document.getElementById('loader').innerText = "Erreur de connexion GitHub.";
+        document.getElementById('loader').innerText = "Erreur de connexion.";
       }
     }
 
     function track(key) {
-      // Calcul du nombre de téléchargements + 1
       const total = counts[key] + 1;
       const url = key === 'win' ? CONFIG.webhooks.win : CONFIG.webhooks.lin;
       const label = key === 'win' ? 'WINDOWS' : 'LINUX';
 
-      // Envoi vers Discord (uniquement)
       fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           embeds: [{
-            title: `📥 Action : Téléchargement ${label}`,
-            fields: [
-              { name: "Nombre de téléchargements", value: `📈 ${total}`, inline: true }
-            ],
-            color: 2555904,
+            title: `📥 Téléchargement : ${label}`,
+            fields: [{ name: "Nombre de téléchargements", value: `📈 ${total}`, inline: true }],
+            color: 3447003,
             timestamp: new Date()
           }]
         })
@@ -190,7 +193,7 @@
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           embeds: [{
-            title: "📋 Rapport de test reçu",
+            title: "📋 Rapport reçu",
             fields: [{name: "Version", value: v, inline: true}, {name: "Message", value: m}],
             color: 3447003, timestamp: new Date()
           }]
