@@ -13,7 +13,6 @@
     p { margin-bottom: 20px; text-align: center; max-width: 600px; }
     
     #downloadList { list-style: none; width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
-    
     li { background: white; border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 15px; }
     
     .game-info { flex: 1; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.1em; }
@@ -32,9 +31,9 @@
 <body>
 
   <h1>Spy Game</h1>
-  <p>Téléchargez la version officielle pour votre système d'exploitation.</p>
+  <p>Téléchargements officiels sécurisés via GitHub.</p>
 
-  <h2>Téléchargements</h2>
+  <h2>Plateformes</h2>
   <ul id="downloadList">
     </ul>
 
@@ -48,34 +47,78 @@
   <script>
     const GITHUB_USER = "celtmen-cpu";
     const GITHUB_REPO = "Spy-game-";
+    
+    // Webhooks distincts
+    const WEBHOOK_WINDOWS = "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp";
+    const WEBHOOK_LINUX = "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj";
 
-    // Liste des fichiers que tu as RÉELLEMENT mis dans ta release GitHub
     const files = [
-      { name: "Windows", file: "SpyGame-Windows.zip", label: ".ZIP" },
-      { name: "Linux", file: "SpyGame-Linux.tar.gz", label: ".TAR.GZ" }
+      { 
+        name: "Windows", 
+        file: "SpyGame-Windows.zip", 
+        label: "PC (.zip)", 
+        webhook: WEBHOOK_WINDOWS 
+      },
+      { 
+        name: "Linux", 
+        file: "SpyGame-Linux.zip", 
+        label: "Linux (.zip)", 
+        webhook: WEBHOOK_LINUX 
+      }
     ];
 
-    const listContainer = document.getElementById('downloadList');
+    async function notifyDiscord(webhookUrl, platform) {
+      const data = {
+        embeds: [{
+          title: "📥 Nouveau téléchargement !",
+          description: `Un utilisateur a lancé le téléchargement de la version **${platform}**.`,
+          color: platform === "Windows" ? 3447003 : 15105570, // Bleu pour Win, Orange pour Linux
+          timestamp: new Date()
+        }]
+      };
 
+      try {
+        await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      } catch (e) { console.error("Erreur Webhook", e); }
+    }
+
+    // Affichage des boutons
+    const list = document.getElementById('downloadList');
     files.forEach(f => {
       const url = `https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/latest/download/${f.file}`;
-      
       const li = document.createElement('li');
       li.innerHTML = `
-        <div class="game-info">
-          ${f.name} <span class="platform-tag">${f.label}</span>
-        </div>
-        <a href="${url}" class="btn">Télécharger</a>
+        <div class="game-info">${f.name} <span class="platform-tag">${f.label}</span></div>
+        <a href="${url}" class="btn" onclick="notifyDiscord('${f.webhook}', '${f.name}')">Télécharger</a>
       `;
-      listContainer.appendChild(li);
+      list.appendChild(li);
     });
 
-    document.getElementById('reviewForm').onsubmit = (e) => {
+    // Envoi des avis sur le webhook Windows (par défaut)
+    document.getElementById('reviewForm').onsubmit = async (e) => {
       e.preventDefault();
-      alert("Avis reçu !");
+      const name = document.getElementById('userName').value;
+      const msg = document.getElementById('userMessage').value;
+
+      const reviewData = {
+        embeds: [{
+          title: "💬 Nouvel Avis Client",
+          fields: [
+            { name: "Joueur", value: name, inline: true },
+            { name: "Message", value: msg }
+          ],
+          color: 3066993
+        }]
+      };
+
+      await fetch(WEBHOOK_WINDOWS, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(reviewData)});
+      alert("Merci ! Ton avis a été envoyé.");
       e.target.reset();
     };
   </script>
-
 </body>
 </html>
