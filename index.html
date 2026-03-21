@@ -14,6 +14,7 @@
       --text-light: #64748b;
       --border: #e2e8f0;
       --danger: #be123c;
+      --success: #10b981;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,8 +51,8 @@
 
     h2 { font-size: 1rem; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: var(--text-light); letter-spacing: 0.5px; }
 
-    /* Grille de téléchargement */
     .download-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    
     .card {
       border: 1px solid var(--border);
       padding: 24px;
@@ -59,34 +60,57 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 180px;
+      min-height: 200px;
+      transition: border-color 0.2s;
     }
-    .os-info { margin-bottom: 15px; }
+    .card:hover { border-color: var(--accent); }
+
     .os-name { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
     .version-tag { font-size: 0.85rem; color: var(--accent); font-weight: 600; margin-bottom: 8px; display: block; }
-    .meta { font-size: 0.8rem; color: var(--text-light); font-family: monospace; }
+    .meta { font-size: 0.85rem; color: var(--text-light); }
+    
+    .count-box { 
+      margin-top: 10px; 
+      font-family: ui-monospace, monospace; 
+      font-weight: 700; 
+      color: var(--primary);
+      position: relative;
+    }
+    
+    .plus-one-anim {
+      color: var(--success);
+      font-weight: 800;
+      position: absolute;
+      right: -25px;
+      opacity: 0;
+      display: none;
+      animation: fadeUp 1s forwards;
+    }
 
     .btn {
       display: block; text-align: center;
       padding: 12px; background: var(--primary); color: white;
       text-decoration: none; font-weight: 600; font-size: 0.9rem;
-      border-radius: 4px; transition: background 0.2s;
+      border-radius: 4px; transition: all 0.2s;
+      margin-top: 15px;
+      border: none; cursor: pointer;
     }
-    .btn:hover { background: #000; }
+    .btn:active { transform: scale(0.98); }
 
-    /* Confidentialité */
-    .confidential-box { background: #fff; border-left: 4px solid var(--danger); }
-    .confidential-box p { font-size: 0.95rem; margin-bottom: 10px; }
-    .confidential-box ul { margin-left: 18px; font-size: 0.9rem; }
+    .confidential-box { border-left: 4px solid var(--danger); }
     .warn { color: var(--danger); font-weight: 700; }
 
-    /* Formulaire */
     form { display: flex; flex-direction: column; gap: 12px; }
     input, textarea {
       padding: 12px; border: 1px solid var(--border); border-radius: 4px;
-      font-family: inherit; font-size: 0.95rem; width: 100%;
+      font-family: inherit; font-size: 0.95rem; width: 100%; background: #fcfcfc;
     }
-    .btn-submit { background: var(--accent); border: none; color: white; cursor: pointer; font-weight: 700; padding: 14px; }
+    .btn-submit { background: var(--accent); color: white; font-weight: 700; padding: 14px; border: none; cursor: pointer; border-radius: 4px; }
+
+    @keyframes fadeUp {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-20px); }
+    }
 
     @media (max-width: 600px) { .download-grid { grid-template-columns: 1fr; } }
   </style>
@@ -95,32 +119,31 @@
 
   <div class="container">
     <header>
-      <div class="status-tag">Système de Distribution Sécurisé</div>
-      <h1>Spy Game : Espace Testeurs</h1>
+      <div class="status-tag">Réseau de Distribution Privé</div>
+      <h1>Spy Game : Administration Beta</h1>
     </header>
 
     <div class="section confidential-box">
-      <h2>Protocole de Confidentialité</h2>
-      <p>L'accès à cette plateforme implique l'acceptation des clauses suivantes :</p>
+      <h2>Accord de Confidentialité Strict</h2>
+      <p>L'accès aux ressources ci-dessous est soumis au secret professionnel :</p>
       <ul>
-        <li><span class="warn">Interdiction de diffusion :</span> Le partage de l'URL de ce site est proscrit.</li>
-        <li><span class="warn">Secret Professionnel :</span> Ne distribuez pas les fichiers binaires à des tiers.</li>
-        <li>Tout accès est monitoré pour garantir l'intégrité du projet.</li>
+        <li><span class="warn">LIEN :</span> Ne jamais divulguer l'URL de ce terminal.</li>
+        <li><span class="warn">FICHIERS :</span> Interdiction de copier ou donner le jeu à des tiers.</li>
       </ul>
     </div>
 
     <div class="section">
-      <h2>Packages de Déploiement</h2>
-      <div id="loader" style="text-align:center; color:var(--text-light); font-size:0.9rem;">Synchronisation des versions...</div>
+      <h2>Paquets Disponibles (Multi-Release)</h2>
+      <div id="loader" style="text-align:center; color:var(--text-light); font-size:0.9rem;">Calcul des données serveurs...</div>
       <div id="downloadGrid" class="download-grid"></div>
     </div>
 
     <div class="section">
-      <h2>Rapport de Feedback Technique</h2>
+      <h2>Rapport de Mission (Anonyme)</h2>
       <form id="feedbackForm">
-        <input type="text" id="ver" placeholder="Version installée (ex: v0.2 Windows)" required>
-        <textarea id="msg" rows="4" placeholder="Observations, rapports de bugs ou suggestions techniques..." required></textarea>
-        <button type="submit" class="btn btn-submit">Envoyer le rapport technique</button>
+        <input type="text" id="ver" placeholder="Version concernée (ex: v0.2 Windows)" required>
+        <textarea id="msg" rows="4" placeholder="Détails techniques, bugs ou suggestions..." required></textarea>
+        <button type="submit" class="btn-submit">Soumettre le rapport technique</button>
       </form>
     </div>
   </div>
@@ -129,18 +152,14 @@
     const CONFIG = {
       user: "celtmen-cpu",
       repo: "Spy-game-",
-      // Tes noms de fichiers exacts
-      targets: {
-        win: "windows_v0.2.zip",
-        lin: "Linux_v0.2.zip"
-      },
+      targets: { win: "windows_v0.2.zip", lin: "Linux_v0.2.zip" },
       webhooks: {
         win: "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp",
         lin: "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj"
       }
     };
 
-    async function getAssets() {
+    async function loadData() {
       try {
         const response = await fetch(`https://api.github.com/repos/${CONFIG.user}/${CONFIG.repo}/releases`);
         const releases = await response.json();
@@ -148,8 +167,6 @@
         const grid = document.getElementById('downloadGrid');
         
         let found = { win: null, lin: null };
-
-        // Parcourir toutes les releases pour trouver les fichiers cibles
         releases.forEach(rel => {
           rel.assets.forEach(asset => {
             if (asset.name === CONFIG.targets.win) found.win = { asset, tag: rel.tag_name };
@@ -157,7 +174,6 @@
           });
         });
 
-        // Affichage dynamique
         Object.keys(found).forEach(key => {
           if (found[key]) {
             const item = found[key];
@@ -168,41 +184,60 @@
             card.className = 'card';
             card.innerHTML = `
               <div class="os-info">
-                <span class="version-tag">Build ${item.tag}</span>
+                <span class="version-tag">Version ${item.tag}</span>
                 <div class="os-name">${platform} Installer</div>
-                <div class="meta">
-                  Fichier: ${item.asset.name}<br>
-                  Poids: ${size} MB<br>
-                  <strong>Téléchargements: ${item.asset.download_count}</strong>
+                <div class="meta">Taille : ${size} MB</div>
+                <div class="count-box">
+                  Extractions : <span id="count-${key}">${item.asset.download_count}</span>
+                  <span id="plus-${key}" class="plus-one-anim">+1</span>
                 </div>
               </div>
-              <a href="${item.asset.browser_download_url}" class="btn" onclick="notify('${key}')">Télécharger</a>
+              <a href="${item.asset.browser_download_url}" class="btn" onclick="handleDownload('${key}')">Extraire le Paquet</a>
             `;
             grid.appendChild(card);
           }
         });
-
       } catch (err) {
-        document.getElementById('loader').innerHTML = "Erreur de connexion aux serveurs GitHub.";
+        document.getElementById('loader').innerHTML = "Erreur de synchronisation serveurs.";
       }
     }
 
-    function notify(key) {
+    function handleDownload(key) {
+      const countEl = document.getElementById(`count-${key}`);
+      const plusEl = document.getElementById(`plus-${key}`);
+      
+      // 1. Mise à jour visuelle immédiate (+1)
+      let currentTotal = parseInt(countEl.innerText);
+      let newTotal = currentTotal + 1;
+      countEl.innerText = newTotal;
+      
+      plusEl.style.display = 'inline';
+      setTimeout(() => { plusEl.style.display = 'none'; }, 1000);
+
+      // 2. Envoi au Webhook Discord avec le +1 inclus
       const url = key === 'win' ? CONFIG.webhooks.win : CONFIG.webhooks.lin;
+      const platformName = key === 'win' ? 'WINDOWS' : 'LINUX';
+
       fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           embeds: [{
-            title: "📥 Accès au package",
-            description: `Un testeur a lancé le téléchargement de la version **${key.toUpperCase()}**.`,
-            color: 242424,
-            timestamp: new Date()
+            title: "📥 NOUVELLE EXTRACTION BETA",
+            description: `Un agent a récupéré la version **${platformName}**.`,
+            fields: [
+              { name: "Statut du fichier", value: "Succès", inline: true },
+              { name: "Total des extractions", value: `📈 ${newTotal}`, inline: true }
+            ],
+            color: 2105893,
+            timestamp: new Date(),
+            footer: { text: "Spy Game Global Network" }
           }]
         })
       });
     }
 
+    // Formulaire Feedback
     document.getElementById('feedbackForm').onsubmit = async (e) => {
       e.preventDefault();
       const v = document.getElementById('ver').value;
@@ -213,17 +248,17 @@
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           embeds: [{
-            title: "📋 Rapport Technique (Anonyme)",
-            fields: [{name: "Version", value: v, inline: true}, {name: "Message", value: m}],
-            color: 242424, timestamp: new Date()
+            title: "📋 RAPPORT TECHNIQUE REÇU",
+            fields: [{name: "Version", value: v, inline: true}, {name: "Détails", value: m}],
+            color: 15105570, timestamp: new Date()
           }]
         })
       });
-      alert("Transmission réussie. Merci pour votre contribution.");
+      alert("Transmission du rapport réussie.");
       e.target.reset();
     };
 
-    getAssets();
+    loadData();
   </script>
 </body>
 </html>
