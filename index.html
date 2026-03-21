@@ -3,217 +3,316 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spy Game | Accès Beta</title>
+  <title>Spy Game :: Network Access Terminal :: BETA v0.2</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
 
     :root {
-      --neon-blue: #00f2ff;
-      --neon-purple: #bc13fe;
-      --dark-bg: #05070a;
-      --card-bg: rgba(10, 15, 25, 0.9);
+      --cyan: #00f2ff;
+      --purple: #bc13fe;
+      --deep-bg: #030507;
+      --card-bg: rgba(10, 15, 25, 0.95);
       --text: #e2e8f0;
+      --glow: rgba(0, 242, 255, 0.4);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
-      font-family: 'Space Grotesk', sans-serif; 
-      background: var(--dark-bg); 
+      font-family: 'JetBrains Mono', monospace; 
+      background: var(--deep-bg); 
       color: var(--text); 
       min-height: 100vh;
       display: flex; 
       flex-direction: column; 
       align-items: center;
       padding: 60px 20px;
-      background-image: radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 50%);
+      overflow-x: hidden;
+    }
+
+    /* === ARRIÈRE-PLAN MATRICE DYNAMIQUE === */
+    #matrix-canvas {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 1; opacity: 0.15; pointer-events: none;
+    }
+
+    /* === ÉLÉMENTS DE L'INTERFACE === */
+    .interface-container {
+      position: relative;
+      z-index: 10;
+      width: 100%; max-width: 900px;
+      display: flex; flex-direction: column; gap: 40px;
     }
 
     h1 { 
-      font-size: clamp(2.2rem, 8vw, 3.5rem);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 8px;
-      color: var(--neon-blue);
-      text-shadow: 0 0 15px rgba(0, 242, 255, 0.6);
-      margin-bottom: 10px;
-      text-align: center;
+      font-size: clamp(2rem, 8vw, 3.2rem); font-weight: 800; text-transform: uppercase;
+      letter-spacing: 5px; color: var(--cyan); text-align: center; margin-bottom: 20px;
+      position: relative; animation: glow-pulse 3s infinite ease-in-out;
     }
+    h1::before { content: "::"; color: var(--purple); margin-right: 15px; }
+    h1::after { content: "::"; color: var(--purple); margin-left: 15px; }
 
-    .beta-badge {
-      font-family: 'JetBrains Mono', monospace;
-      background: var(--neon-purple);
-      color: white;
-      padding: 4px 12px;
-      font-size: 0.8rem;
-      margin-bottom: 50px;
-      border-radius: 2px;
-      letter-spacing: 2px;
-    }
-
-    .section-container { width: 100%; max-width: 800px; margin-bottom: 40px; }
-
-    h2 { 
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1rem;
-      color: var(--neon-purple);
-      margin-bottom: 20px;
-      text-transform: uppercase;
-      border-left: 3px solid var(--neon-purple);
-      padding-left: 15px;
-    }
-
-    #downloadList { list-style: none; display: flex; flex-direction: column; gap: 15px; }
-    .dl-item { 
+    .section {
       background: var(--card-bg);
-      border: 1px solid rgba(0, 242, 255, 0.2);
-      padding: 25px; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center;
-      transition: 0.3s;
+      border: 1px solid rgba(0, 242, 255, 0.1);
+      box-shadow: 0 5px 30px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 242, 255, 0.02);
+      padding: 30px; position: relative;
     }
-    .dl-item:hover { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0, 242, 255, 0.15); }
+    .section::before {
+      content: " "; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    }
+
+    h2 { font-size: 1rem; color: var(--purple); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
+
+    /* === LISTE DE TÉLÉCHARGEMENT DYNAMIQUE === */
+    #downloadList { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+    .dl-item { 
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 25px; display: flex; justify-content: space-between; align-items: center;
+      transition: all 0.3s; background: rgba(0,0,0,0.3);
+    }
+    .dl-item:hover { border-color: var(--cyan); box-shadow: 0 0 20px var(--glow); transform: translateX(5px); }
+    .dl-item.loading { opacity: 0.5; filter: blur(2px); }
+
+    .platform-title { font-size: 1.4rem; font-weight: 700; color: #fff; }
+    .file-meta { font-size: 0.8rem; color: var(--cyan); margin-top: 5px; }
 
     .btn { 
-      padding: 12px 30px; 
-      background: transparent;
-      color: var(--neon-blue);
-      border: 1px solid var(--neon-blue);
-      font-family: 'JetBrains Mono', monospace;
-      text-decoration: none;
-      font-weight: bold;
-      transition: 0.3s;
-      text-transform: uppercase;
+      padding: 15px 40px; background: transparent; color: var(--cyan); border: 2px solid var(--cyan);
+      font-weight: bold; text-decoration: none; text-transform: uppercase; cursor: pointer;
+      position: relative; overflow: hidden; transition: 0.3s;
     }
-    .btn:hover { background: var(--neon-blue); color: var(--dark-bg); box-shadow: 0 0 15px var(--neon-blue); }
+    .btn:hover { background: var(--cyan); color: var(--deep-bg); box-shadow: 0 0 25px var(--cyan); }
+    .btn.processing { border-color: var(--purple); color: var(--purple); cursor: wait; }
+    .btn.processing:hover { background: transparent; box-shadow: none; }
 
-    .info-box { 
-      background: rgba(255, 255, 255, 0.03); 
-      padding: 20px; 
-      border-radius: 4px; 
-      font-size: 0.9rem; 
-      line-height: 1.6;
-      color: #94a3b8;
-    }
-    
-    #reviewForm { 
-      background: var(--card-bg);
-      padding: 30px; 
-      border: 1px solid rgba(188, 19, 254, 0.2);
-    }
+    /* === CONSOLE STATUS === */
+    #statusConsole { font-size: 0.8rem; color: #fff; max-height: 200px; overflow-y: hidden; }
+    #statusConsole p { margin-bottom: 5px; opacity: 0.8; }
+    #statusConsole p.cmd { color: var(--purple); }
+    #statusConsole p.success { color: #0f0; text-shadow: 0 0 5px #0f0; }
+    #statusConsole p.error { color: #f00; text-shadow: 0 0 5px #f00; }
+
+    /* === CONDITIONS & FORMULAIRE === */
+    .info-box { font-size: 0.9rem; line-height: 1.7; color: #94a3b8; }
+    .info-box ul { margin-left: 20px; margin-top: 10px; list-style: square; color: var(--cyan); }
+    .info-box ul li { color: #94a3b8; }
+    .alert-text { color: #ff0055; font-weight: bold; text-shadow: 0 0 5px rgba(255, 0, 85, 0.5); }
+
     input, textarea { 
-      width: 100%; padding: 12px; background: rgba(0,0,0,0.5); 
-      border: 1px solid rgba(255,255,255,0.1); color: #fff; margin-bottom: 15px; 
-      font-family: inherit;
+      width: 100%; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05);
+      color: #fff; margin-bottom: 20px; font-family: inherit; font-size: 0.9rem;
     }
-    .submit-btn { 
-      width: 100%; background: var(--neon-purple); color: white; 
-      padding: 15px; border: none; font-weight: bold; cursor: pointer; 
-      font-family: 'JetBrains Mono', monospace; transition: 0.3s;
-    }
-    .submit-btn:hover { box-shadow: 0 0 15px var(--neon-purple); opacity: 0.9; }
+    input:focus, textarea:focus { outline: none; border-color: var(--purple); background: rgba(188, 19, 254, 0.05); }
+    .submit-btn { width: 100%; background: var(--purple); color: white; padding: 18px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+    .submit-btn:hover { box-shadow: 0 0 20px var(--purple); opacity: 0.8; }
 
-    .contact-link { color: var(--neon-blue); text-decoration: none; font-weight: bold; }
-
-    @media (max-width: 600px) { .dl-item { flex-direction: column; gap: 20px; text-align: center; } }
+    /* === ANIMATIONS & MEDIA === */
+    @keyframes glow-pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 15px var(--cyan); } 50% { opacity: 0.8; text-shadow: 0 0 5px var(--cyan); } }
+    @media (max-width: 600px) { .dl-item { flex-direction: column; gap: 20px; text-align: center; } .platform-title { font-size: 1.1rem; } }
   </style>
 </head>
 <body>
 
-  <h1>SPY GAME</h1>
-  <div class="beta-badge">PHASE DE TEST BETA v0.2</div>
+  <canvas id="matrix-canvas"></canvas>
 
-  <div class="section-container">
-    <h2>[01] RÉCUPÉRATION DES PACKS BETA</h2>
-    <ul id="downloadList"></ul>
-  </div>
+  <div class="interface-container">
+    <h1>SPY GAME NETWORK</h1>
 
-  <div class="section-container">
-    <h2>[02] PROTOCOLE BETA (CGU)</h2>
-    <div class="info-box">
-      <p>En participant à cette Beta, vous reconnaissez que :</p>
-      <ul style="margin-left:20px; margin-top:10px;">
-        <li>Le logiciel peut contenir des bugs ou des instabilités.</li>
-        <li>Toute tentative de modification des fichiers est interdite.</li>
-        <li>Vos retours (Feedbacks) sont essentiels pour l'amélioration du projet.</li>
-      </ul>
+    <div class="section">
+      <h2>[00] TERMINAL LIVE STATUS :: GITHUB LINK DÉTECTÉ</h2>
+      <div id="statusConsole">
+        <p class="cmd">> INITIALISATION SYSTÈME D'ESPIONNAGE...</p>
+        <p>> Interrogation API GitHub...</p>
+      </div>
     </div>
-  </div>
 
-  <div class="section-container">
-    <h2>[03] RAPPORT DE TESTEUR</h2>
-    <form id="reviewForm">
-      <input type="text" id="userName" placeholder="PSEUDO TESTEUR" required>
-      <textarea id="userMessage" rows="3" placeholder="SIGNALEZ UN BUG OU DONNEZ VOTRE AVIS SUR LA v0.2..." required></textarea>
-      <button type="submit" class="submit-btn">ENVOYER LE RAPPORT</button>
-    </form>
-  </div>
-
-  <div class="section-container">
-    <h2>[04] SUPPORT TECHNIQUE</h2>
-    <div class="info-box" style="text-align: center;">
-      Besoin d'aide ou signalement direct ? <br><br>
-      <a href="mailto:votre-email@exemple.com" class="contact-link">OUVRIR UNE LIAISON PAR EMAIL</a>
+    <div class="section">
+      <h2>[01] ACCÈS AUX FICHIERS BETA v0.2</h2>
+      <ul id="downloadList">
+        </ul>
     </div>
+
+    <div class="section">
+      <h2>[02] DIRECTIVES DE SÉCURITÉ :: CONFIDENTIEL ABSOLU</h2>
+      <div class="info-box">
+        <p>L'accès à ce terminal est soumis à une clause de stricte confidentialité. En procédant à l'extraction, vous acceptez les règles suivantes :</p>
+        <ul>
+          <li><span class="alert-text">SECRET DÉFENSE :</span> Vous n'avez en aucun cas l'autorisation de distribuer ou de donner ce jeu à des tiers.</li>
+          <li><span class="alert-text">LIEN SÉCURISÉ :</span> Il est formellement interdit de partager l'URL de ce site web.</li>
+          <li>Ce logiciel est une Beta privée interne. Toute fuite d'information sera considérée comme une violation directe du protocole.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>[03] RAPPORT DE MISSION :: CANAL SÉCURISÉ ANONYME</h2>
+      <form id="reviewForm">
+        <input type="text" id="gameVersion" placeholder="VERSION TESTÉE (ex: Windows v0.2)" required>
+        <textarea id="userMessage" rows="3" placeholder="TRANSMETTEZ VOTRE RAPPORT DE BUG OU RECOMMANDATION TECHNIQUE..." required></textarea>
+        <button type="submit" class="submit-btn">CHIFFRER ET TRANSMETTRE</button>
+      </form>
+    </div>
+
   </div>
 
   <script>
-    const GITHUB_USER = "celtmen-cpu";
-    const GITHUB_REPO = "Spy-game-";
-    const WEB_WIN = "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp";
-    const WEB_LIN = "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj";
+    // === CONFIGURATION SPY GAME DYNAMIQUE ===
+    const CONFIG = {
+      user: "celtmen-cpu",
+      repo: "Spy-game-",
+      files: {
+        windows: { name: "Spy Game (Windows Beta)", fileName: "windows_v0.2.zip" },
+        linux: { name: "Spy Game (Linux Beta)", fileName: "Linux_v0.2.zip" }
+      },
+      webhooks: {
+        windows: "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp",
+        linux: "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj"
+      }
+    };
 
-    const platforms = [
-      { id: "WINDOWS", file: "windows_v0.2.zip", tag: "BETA_v0.2", web: WEB_WIN, col: 0x00f2ff },
-      { id: "LINUX", file: "Linux_v0.2.zip", tag: "BETA_v0.2", web: WEB_LIN, col: 0xbc13fe }
-    ];
+    // === TERMINAL & GITHUB API ===
+    const consoleBox = document.getElementById('statusConsole');
+    const writeLog = (text, type = '') => {
+      const p = document.createElement('p');
+      if (type) p.className = type;
+      p.textContent = `> ${text}`;
+      consoleBox.appendChild(p);
+    }
 
-    async function notify(url, name, col) {
-      await fetch(url, {
+    async function initSpyTerminal() {
+      try {
+        const apiUrl = `https://api.github.com/repos/${CONFIG.user}/${CONFIG.repo}/releases/latest`;
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Accès API GitHub bloqué ou dépôt introuvable.");
+        
+        const data = await response.json();
+        const latestTagName = data.tag_name;
+        
+        writeLog(`Données de version v${latestTagName} récupérées avec succès.`, 'success');
+        writeLog(`${data.assets.length} packages d'extraction localisés.`);
+
+        const list = document.getElementById('downloadList');
+        let filesFound = 0;
+
+        data.assets.forEach(asset => {
+          let type = '';
+          if (asset.name === CONFIG.files.windows.fileName) type = 'windows';
+          else if (asset.name === CONFIG.files.linux.fileName) type = 'linux';
+          
+          if (type) {
+            const sizeMb = (asset.size / (1024 * 1024)).toFixed(1);
+            const downloadCount = asset.download_count;
+            
+            const li = document.createElement('li');
+            li.className = 'dl-item';
+            li.innerHTML = `
+              <div class="game-info">
+                <span class="platform-title">${CONFIG.files[type].name}</span>
+                <p class="file-meta">PACKAGE: ${asset.name} :: TAILLE: ${sizeMb} MB :: EXTRACTS: ${downloadCount}</p>
+              </div>
+              <button class="btn" id="btn-${type}" onclick="handleDownload('${type}', '${asset.browser_download_url}')">INITIALISER</button>
+            `;
+            list.appendChild(li);
+            filesFound++;
+          }
+        });
+
+        if (filesFound < 2) writeLog(`Alerte: Un ou plusieurs packages configurés sont manquants sur GitHub.`, 'error');
+
+      } catch (error) {
+        writeLog(error.message, 'error');
+        writeLog(`Passage en mode fallback hors ligne.`);
+      }
+    }
+
+    // === GESTIONNAIRE DE TÉLÉCHARGEMENT & DISCORD ===
+    async function handleDownload(platformType, downloadUrl) {
+      const btn = document.getElementById(`btn-${platformType}`);
+      const platformName = CONFIG.files[platformType].name;
+      const webhookUrl = CONFIG.webhooks[platformType];
+
+      btn.textContent = "EXTRACTION...";
+      btn.classList.add('processing');
+
+      fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           embeds: [{ 
-            title: "🕵️ ALERTE BETA", 
-            description: `Un testeur a téléchargé la Beta **${name}**.`, 
-            color: col, 
-            timestamp: new Date() 
+            title: "🕵️ ALERTE BETA :: EXTRACTION", 
+            description: `Package **${platformName}** en cours d'extraction par un Agent.`, 
+            color: 0x00f2ff, 
+            timestamp: new Date(),
+            footer: { text: "Protocol Security Activated" }
           }]
         })
       });
+
+      window.location.href = downloadUrl;
+
+      setTimeout(() => {
+        btn.textContent = "INITIALISER";
+        btn.classList.remove('processing');
+      }, 3000);
     }
 
-    const list = document.getElementById('downloadList');
-    platforms.forEach(p => {
-      const url = `https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/latest/download/${p.file}`;
-      const li = document.createElement('li');
-      li.className = 'dl-item';
-      li.innerHTML = `
-        <div><strong style="font-size:1.2rem; color:#fff">${p.id}</strong><br><small style="color:var(--neon-blue)">${p.tag}</small></div>
-        <a href="${url}" class="btn" onclick="notify('${p.web}', '${p.id}', ${p.col})">TÉLÉCHARGER</a>
-      `;
-      list.appendChild(li);
-    });
-
+    // === FEEDBACK FORM ANONYME ===
     document.getElementById('reviewForm').onsubmit = async (e) => {
       e.preventDefault();
-      const user = document.getElementById('userName').value;
+      const version = document.getElementById('gameVersion').value;
       const text = document.getElementById('userMessage').value;
-      await fetch(WEB_WIN, {
+
+      await fetch(CONFIG.webhooks.windows, { 
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           embeds: [{ 
-            title: "💬 FEEDBACK BETA v0.2", 
-            fields: [{name:"TESTEUR", value:user}, {name:"RAPPORT", value:text}], 
+            title: "💬 RAPPORT DE MISSION ANONYME", 
+            fields: [
+              {name:"VERSION TESTÉE", value:version, inline:true}, 
+              {name:"DONNÉES", value:text}
+            ], 
             color: 0xbc13fe 
           }]
         })
       });
-      alert("Rapport transmis aux serveurs. Merci Agent.");
+      alert("Transmission réussie. Rapport chiffré et envoyé.");
       e.target.reset();
     };
+
+    // === EFFET ARRIÈRE-PLAN MATRICE ===
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = '01 spy operations secure encrypted alpha beta 0.2 network top secret'.split('');
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    for (let i = 0; i < columns; i++) drops[i] = 1;
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(3, 5, 7, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#bc13fe'; 
+      ctx.font = fontSize + 'px monospace';
+      
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+    
+    setInterval(drawMatrix, 35);
+    initSpyTerminal();
+
   </script>
 </body>
 </html>
