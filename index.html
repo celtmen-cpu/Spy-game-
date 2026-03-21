@@ -14,20 +14,17 @@
     
     #downloadList { list-style: none; width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
     
-    li { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 15px; border: 1px solid white; }
+    li { background: white; border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 15px; }
     
     .game-info { flex: 1; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.1em; }
     .platform-tag { font-size: 0.7em; background: #34495e; color: white; padding: 3px 10px; border-radius: 20px; }
     
-    .btn { padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1em; transition: 0.3s; text-align: center; background: #2980b9; color: #fff; border: none; cursor: pointer; }
+    .btn { padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1em; transition: 0.3s; text-align: center; background: #2980b9; color: #fff; border: none; cursor: pointer; min-width: 150px; }
     .btn:hover { background: #1abc9c; transform: scale(1.05); }
 
-    .rules-card { background: white; border-left: 5px solid #e74c3c; padding: 20px; border-radius: 10px; max-width: 600px; width: 100%; margin: 20px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-    
     #reviewForm { width: 100%; max-width: 600px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
     #reviewForm input, #reviewForm textarea { padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; }
-    #reviewForm button { padding: 12px; border-radius: 8px; border: none; background: #2c3e50; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
-    #reviewForm button:hover { background: #34495e; }
+    #reviewForm button { padding: 12px; border-radius: 8px; border: none; background: #2c3e50; color: white; font-weight: bold; cursor: pointer; }
 
     @media (max-width: 600px) { li { flex-direction: column; text-align: center; } .btn { width: 100%; } }
   </style>
@@ -35,15 +32,11 @@
 <body>
 
   <h1>Spy Game</h1>
-  <p>Téléchargez la dernière version officielle du jeu pour votre plateforme.</p>
+  <p>Téléchargez la version officielle pour votre système d'exploitation.</p>
 
-  <h2>Plateformes disponibles</h2>
+  <h2>Téléchargements</h2>
   <ul id="downloadList">
     </ul>
-
-  <div class="rules-card">
-    <strong>Note :</strong> Pour Android, vous devrez autoriser l'installation d'applications de sources inconnues dans vos paramètres si vous téléchargez l'APK.
-  </div>
 
   <h2>Laisser un avis</h2>
   <form id="reviewForm">
@@ -53,132 +46,36 @@
   </form>
 
   <script>
-    // ==========================================
-    // CONFIGURATION GITHUB (MODIFIÉE)
-    // ==========================================
-    const GITHUB_CONFIG = {
-      user: "celtmen-cpu",
-      repo: "Spy-game-",
-      files: [
-        { 
-          name: "Windows (PC)", 
-          fileName: "SpyGame-Windows.zip", // <--- Vérifie que ton fichier s'appelle bien comme ça dans ta Release
-          tag: "Stable" 
-        },
-        { 
-          name: "Android (Mobile)", 
-          fileName: "SpyGame.apk",         // <--- Idem ici pour l'APK
-          tag: "Dernière version" 
-        }
-      ]
-    };
+    const GITHUB_USER = "celtmen-cpu";
+    const GITHUB_REPO = "Spy-game-";
+
+    // Liste des fichiers que tu as RÉELLEMENT mis dans ta release GitHub
+    const files = [
+      { name: "Windows", file: "SpyGame-Windows.zip", label: ".ZIP" },
+      { name: "Linux", file: "SpyGame-Linux.tar.gz", label: ".TAR.GZ" }
+    ];
 
     const listContainer = document.getElementById('downloadList');
 
-    // Génération automatique des liens
-    GITHUB_CONFIG.files.forEach(file => {
-      // Construction de l'URL vers la version la plus récente
-      const downloadUrl = `https://github.com/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/releases/latest/download/${file.fileName}`;
+    files.forEach(f => {
+      const url = `https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/latest/download/${f.file}`;
       
       const li = document.createElement('li');
       li.innerHTML = `
         <div class="game-info">
-          ${file.name} 
-          <span class="platform-tag">${file.tag}</span>
+          ${f.name} <span class="platform-tag">${f.label}</span>
         </div>
-        <a href="${downloadUrl}" class="btn">Télécharger</a>
+        <a href="${url}" class="btn">Télécharger</a>
       `;
       listContainer.appendChild(li);
     });
 
-    // Gestion du formulaire
     document.getElementById('reviewForm').onsubmit = (e) => {
       e.preventDefault();
-      const name = document.getElementById('userName').value;
-      alert(`Merci ${name} ! Votre avis a bien été simulé.`);
+      alert("Avis reçu !");
       e.target.reset();
     };
   </script>
-
-</body>
-</html>      windows: { label: "Spy Game pour Windows", lien: "https://github.com/celtmen-cpu/Spy-game-/releases/download/windows/windows_v0.2.zip" },
-      linux: { label: "Spy Game pour Linux", lien: "versions/linux_0.2.tar.gz" },
-      android: { label: "Spy Game Mobile (APK)", lien: "versions/android_0.2.apk" }
-    },
-    webhook: "https://discord.com/api/webhooks/1484636718325039164/3i1nNnt-qsuefaRujtrXEAaDywbXrL293c0UvatufwGy6O5r0-lRGZQxzv_RwzN-Rrqy"
-  };
-</script>
-
-<h1 id="main-title"></h1>
-<p>Téléchargez la dernière version officielle de <strong>Spy Game</strong>.</p>
-
-<h2>Windows</h2>
-<ul>
-  <li>
-    <div class="game-info"><span id="win-label"></span> <span class="platform-tag">PC</span></div>
-    <a id="win-link" href="#" class="btn" download>Télécharger</a>
-  </li>
-</ul>
-
-<h2>Linux</h2>
-<ul>
-  <li>
-    <div class="game-info"><span id="linux-label"></span> <span class="platform-tag">Linux</span></div>
-    <a id="linux-link" href="#" class="btn" download>Télécharger</a>
-  </li>
-</ul>
-
-<h2>Android</h2>
-<ul>
-  <li>
-    <div class="game-info"><span id="android-label"></span> <span class="platform-tag">APK</span></div>
-    <a id="android-link" href="#" class="btn" download>Télécharger</a>
-  </li>
-</ul>
-
-<h2>Conditions d'utilisation</h2>
-<div class="rules-card">
-  <p>🤫 <strong>CONFIDENTIALITÉ :</strong> Ce projet est strictement confidentiel. Il est interdit de partager ce lien ou l'application.</p>
-  <p>🎮 <strong>AMUSEMENT :</strong> La règle principale est de s'amuser au maximum avec le jeu !</p>
-</div>
-
-<h2>Un retour sur Spy Game ?</h2>
-<form id="reviewForm">
-  <input type="text" id="versionInfo" placeholder="Ta plateforme (ex: Windows / Android)" required>
-  <textarea id="reviewMessage" placeholder="Ton avis, une idée ou un bug..." rows="4" required></textarea>
-  <button type="submit">Envoyer mon feedback</button>
-  <p id="status" style="text-align:center; font-weight:bold; margin-top:10px;"></p>
-</form>
-
-<script>
-  document.getElementById('main-title').innerText = CONFIG.nomDuJeu;
-  document.getElementById('win-label').innerText = CONFIG.platforms.windows.label;
-  document.getElementById('win-link').href = CONFIG.platforms.windows.lien;
-  document.getElementById('linux-label').innerText = CONFIG.platforms.linux.label;
-  document.getElementById('linux-link').href = CONFIG.platforms.linux.lien;
-  document.getElementById('android-label').innerText = CONFIG.platforms.android.label;
-  document.getElementById('android-link').href = CONFIG.platforms.android.lien;
-
-  document.getElementById("reviewForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const platform = document.getElementById("versionInfo").value;
-    const msg = document.getElementById("reviewMessage").value;
-    const status = document.getElementById("status");
-    status.innerText = "Envoi en cours...";
-
-    fetch(CONFIG.webhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: `🕵️‍♂️ **Feedback Spy Game**\n**Plateforme:** ${platform}\n**Message:** ${msg}` })
-    })
-    .then(res => {
-      if(res.ok) {
-        status.innerText = "✅ Feedback envoyé !";
-        document.getElementById("reviewForm").reset();
-      } else { status.innerText = "❌ Erreur d'envoi."; }
-    });
-  });
-</script>
 
 </body>
 </html>
