@@ -3,120 +3,289 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spy Game - Téléchargements</title>
-  <link rel="icon" href="https://images.icon-icons.com/4029/PNG/512/twitter_x_new_logo_x_rounded_icon_256078.png" type="image/png">
+  <title>Spy Game | Terminal de Téléchargement</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+    :root {
+      --neon-blue: #00f2ff;
+      --neon-purple: #bc13fe;
+      --dark-bg: #05070a;
+      --card-bg: rgba(10, 15, 25, 0.8);
+      --text: #e2e8f0;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #2c3e50; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-    h1 { text-align: center; margin: 20px 0; font-size: 2.2em; color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; }
-    h2 { width: 100%; max-width: 800px; font-size: 1.4em; color: #34495e; margin: 30px 0 15px; border-bottom: 2px solid #2980b9; padding-bottom: 8px; }
-    p { margin-bottom: 20px; text-align: center; max-width: 600px; }
     
-    #downloadList { list-style: none; width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
-    li { background: white; border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 15px; }
-    
-    .game-info { flex: 1; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.1em; }
-    .platform-tag { font-size: 0.7em; background: #34495e; color: white; padding: 3px 10px; border-radius: 20px; }
-    
-    .btn { padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1em; transition: 0.3s; text-align: center; background: #2980b9; color: #fff; border: none; cursor: pointer; min-width: 150px; }
-    .btn:hover { background: #1abc9c; transform: scale(1.05); }
+    body { 
+      font-family: 'Space Grotesk', sans-serif; 
+      background: var(--dark-bg); 
+      color: var(--text); 
+      min-height: 100vh;
+      display: flex; 
+      flex-direction: column; 
+      align-items: center;
+      padding: 60px 20px;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 50%),
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      background-size: 100% 100%, 100% 4px, 3px 100%;
+    }
 
-    #reviewForm { width: 100%; max-width: 600px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-    #reviewForm input, #reviewForm textarea { padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; }
-    #reviewForm button { padding: 12px; border-radius: 8px; border: none; background: #2c3e50; color: white; font-weight: bold; cursor: pointer; }
+    /* Animation Scanline */
+    body::before {
+      content: " ";
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      z-index: 2;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+    }
 
-    @media (max-width: 600px) { li { flex-direction: column; text-align: center; } .btn { width: 100%; } }
+    h1 { 
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 8px;
+      color: var(--neon-blue);
+      text-shadow: 0 0 15px rgba(0, 242, 255, 0.6);
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    .status-bar {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--neon-purple);
+      margin-bottom: 50px;
+      text-transform: uppercase;
+      display: flex;
+      gap: 15px;
+    }
+
+    .status-bar span::before { content: "[ "; }
+    .status-bar span::after { content: " ]"; }
+
+    #downloadList { 
+      list-style: none; 
+      width: 100%; 
+      max-width: 800px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 25px; 
+      z-index: 3;
+    }
+
+    li { 
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 242, 255, 0.2);
+      border-radius: 4px; 
+      padding: 30px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      position: relative;
+      overflow: hidden;
+      transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    li:hover {
+      border-color: var(--neon-blue);
+      box-shadow: 0 0 30px rgba(0, 242, 255, 0.15);
+      transform: scale(1.02);
+    }
+
+    .game-info { position: relative; z-index: 2; }
+    .os-name { 
+      display: block;
+      font-size: 1.6rem; 
+      font-weight: 700; 
+      color: #fff; 
+      letter-spacing: 1px;
+    }
+    .version-tag { 
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; 
+      color: var(--neon-blue); 
+    }
+
+    .btn { 
+      position: relative;
+      padding: 15px 35px; 
+      background: transparent;
+      color: var(--neon-blue);
+      border: 2px solid var(--neon-blue);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      cursor: pointer;
+      overflow: hidden;
+      transition: 0.3s;
+      z-index: 2;
+    }
+
+    .btn:hover {
+      background: var(--neon-blue);
+      color: var(--dark-bg);
+      box-shadow: 0 0 20px var(--neon-blue);
+    }
+
+    #reviewForm { 
+      width: 100%; 
+      max-width: 800px; 
+      background: var(--card-bg);
+      padding: 40px; 
+      border-radius: 4px; 
+      margin-top: 60px;
+      border: 1px solid rgba(188, 19, 254, 0.3);
+      position: relative;
+    }
+
+    h2 { 
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 25px; 
+      font-size: 1.2rem; 
+      color: var(--neon-purple); 
+      text-transform: uppercase;
+    }
+
+    input, textarea { 
+      width: 100%;
+      padding: 15px; 
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      margin-bottom: 20px;
+      transition: 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--neon-purple);
+      background: rgba(188, 19, 254, 0.05);
+    }
+
+    .submit-btn { 
+      width: 100%; 
+      background: transparent;
+      border: 1px solid var(--neon-purple);
+      color: var(--neon-purple);
+      padding: 18px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      font-family: 'JetBrains Mono', monospace;
+      transition: 0.3s;
+    }
+
+    .submit-btn:hover { 
+      background: var(--neon-purple);
+      color: #fff;
+      box-shadow: 0 0 20px var(--neon-purple);
+    }
+
+    @media (max-width: 600px) { 
+        li { flex-direction: column; text-align: center; gap: 25px; }
+        .btn { width: 100%; }
+        h1 { letter-spacing: 4px; }
+    }
   </style>
 </head>
 <body>
 
-  <h1>Spy Game</h1>
-  <p>Téléchargements officiels sécurisés via GitHub.</p>
+  <h1>SPY GAME</h1>
+  <div class="status-bar">
+    <span>SYSTEM: ONLINE</span>
+    <span>ENCRYPTION: ACTIVE</span>
+  </div>
 
-  <h2>Plateformes</h2>
   <ul id="downloadList">
     </ul>
 
-  <h2>Laisser un avis</h2>
   <form id="reviewForm">
-    <input type="text" id="userName" placeholder="Votre nom" required>
-    <textarea id="userMessage" rows="4" placeholder="Votre message..." required></textarea>
-    <button type="submit">Envoyer l'avis</button>
+    <h2>Rapport de mission (Feedback)</h2>
+    <input type="text" id="userName" placeholder="IDENTIFIANT AGENT" required>
+    <textarea id="userMessage" rows="4" placeholder="TRANSMISSION DES DONNÉES..." required></textarea>
+    <button type="submit" class="submit-btn">TRANSMETTRE LE RAPPORT</button>
   </form>
 
   <script>
     const GITHUB_USER = "celtmen-cpu";
     const GITHUB_REPO = "Spy-game-";
     
-    // Webhooks distincts
     const WEBHOOK_WINDOWS = "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp";
     const WEBHOOK_LINUX = "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj";
 
-    const files = [
+    const platforms = [
       { 
-        name: "Windows", 
-        file: "SpyGame-Windows.zip", 
-        label: "PC (.zip)", 
-        webhook: WEBHOOK_WINDOWS 
+        id: "WINDOWS", 
+        fileName: "windows_v0.2.zip", 
+        version: "REL_0.2.STABLE", 
+        webhook: WEBHOOK_WINDOWS,
+        color: 0x00f2ff
       },
       { 
-        name: "Linux", 
-        file: "SpyGame-Linux.zip", 
-        label: "Linux (.zip)", 
-        webhook: WEBHOOK_LINUX 
+        id: "LINUX", 
+        fileName: "Linux_v0.2.zip", 
+        version: "REL_0.2.BETA", 
+        webhook: WEBHOOK_LINUX,
+        color: 0xbc13fe
       }
     ];
 
-    async function notifyDiscord(webhookUrl, platform) {
-      const data = {
+    async function sendToDiscord(url, platformName, embedColor) {
+      const payload = {
         embeds: [{
-          title: "📥 Nouveau téléchargement !",
-          description: `Un utilisateur a lancé le téléchargement de la version **${platform}**.`,
-          color: platform === "Windows" ? 3447003 : 15105570, // Bleu pour Win, Orange pour Linux
+          title: "🕵️ ALERTE TÉLÉCHARGEMENT",
+          description: `L'agent a récupéré le package **${platformName}**.`,
+          color: embedColor,
           timestamp: new Date()
         }]
       };
-
       try {
-        await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-      } catch (e) { console.error("Erreur Webhook", e); }
+        await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      } catch (err) { console.error(err); }
     }
 
-    // Affichage des boutons
     const list = document.getElementById('downloadList');
-    files.forEach(f => {
-      const url = `https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/latest/download/${f.file}`;
+    platforms.forEach(p => {
+      const downloadUrl = `https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/latest/download/${p.fileName}`;
       const li = document.createElement('li');
       li.innerHTML = `
-        <div class="game-info">${f.name} <span class="platform-tag">${f.label}</span></div>
-        <a href="${url}" class="btn" onclick="notifyDiscord('${f.webhook}', '${f.name}')">Télécharger</a>
+        <div class="game-info">
+          <span class="os-name">${p.id}</span>
+          <span class="version-tag">${p.version}</span>
+        </div>
+        <a href="${downloadUrl}" class="btn" onclick="sendToDiscord('${p.webhook}', '${p.id}', ${p.color})">INITIALISER</a>
       `;
       list.appendChild(li);
     });
 
-    // Envoi des avis sur le webhook Windows (par défaut)
     document.getElementById('reviewForm').onsubmit = async (e) => {
       e.preventDefault();
-      const name = document.getElementById('userName').value;
-      const msg = document.getElementById('userMessage').value;
+      const user = document.getElementById('userName').value;
+      const text = document.getElementById('userMessage').value;
 
-      const reviewData = {
+      const reviewPayload = {
         embeds: [{
-          title: "💬 Nouvel Avis Client",
+          title: "💬 TRANSMISSION REÇUE",
           fields: [
-            { name: "Joueur", value: name, inline: true },
-            { name: "Message", value: msg }
+            { name: "AGENT", value: user, inline: true },
+            { name: "MESSAGE", value: text }
           ],
-          color: 3066993
+          color: 0xbc13fe,
+          timestamp: new Date()
         }]
       };
 
-      await fetch(WEBHOOK_WINDOWS, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(reviewData)});
-      alert("Merci ! Ton avis a été envoyé.");
+      await fetch(WEBHOOK_WINDOWS, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(reviewPayload)});
+      alert("Transmission réussie, Agent.");
       e.target.reset();
     };
   </script>
