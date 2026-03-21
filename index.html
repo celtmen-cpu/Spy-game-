@@ -3,106 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spy Game - Distribution Center</title>
+  <title>Portail de Distribution Privé | Spy Game</title>
   <style>
     :root {
-      --primary: #1a202c;
-      --accent: #3182ce;
-      --bg: #f7fafc;
+      --primary: #0f172a;
+      --accent: #2563eb;
+      --bg: #f8fafc;
       --card: #ffffff;
-      --text: #2d3748;
-      --text-light: #718096;
+      --text: #1e293b;
+      --text-light: #64748b;
       --border: #e2e8f0;
+      --danger: #be123c;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
-      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif; 
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif; 
       background-color: var(--bg); 
       color: var(--text); 
       display: flex; 
       flex-direction: column; 
       align-items: center;
-      padding: 80px 20px;
+      padding: 60px 20px;
       line-height: 1.6;
     }
 
-    .container {
-      width: 100%;
-      max-width: 800px;
+    .container { width: 100%; max-width: 850px; }
+
+    header { text-align: center; margin-bottom: 40px; }
+    h1 { font-size: 2rem; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+    .status-tag { 
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; background: #f1f5f9; color: #475569; 
+      font-size: 0.75rem; font-weight: 700; border-radius: 4px; text-transform: uppercase;
     }
 
-    /* En-tête */
-    header { text-align: center; margin-bottom: 50px; }
-    h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; margin-bottom: 10px; }
-    .badge { 
-      display: inline-block; padding: 4px 12px; background: #ebf8ff; color: #2b6cb0; 
-      font-size: 0.75rem; font-weight: 700; border-radius: 999px; text-transform: uppercase;
-    }
-
-    /* Section commune */
     .section {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 32px;
+      border-radius: 8px;
+      padding: 30px;
       margin-bottom: 24px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
-    h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; color: var(--primary); display: flex; align-items: center; }
-    h2::before { content: ""; display: inline-block; width: 4px; height: 18px; background: var(--accent); margin-right: 12px; border-radius: 2px; }
+    h2 { font-size: 1rem; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: var(--text-light); letter-spacing: 0.5px; }
 
-    /* Liste de téléchargement */
-    .download-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .download-card {
+    /* Grille de téléchargement */
+    .download-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .card {
       border: 1px solid var(--border);
-      padding: 20px;
-      border-radius: 8px;
+      padding: 24px;
+      border-radius: 6px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      transition: transform 0.2s, border-color 0.2s;
+      justify-content: space-between;
+      min-height: 180px;
     }
-    .download-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-    .os-title { font-weight: 700; font-size: 1.05rem; }
-    .stats { font-size: 0.8rem; color: var(--text-light); font-family: ui-monospace, SFMono-Regular, monospace; }
+    .os-info { margin-bottom: 15px; }
+    .os-name { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
+    .version-tag { font-size: 0.85rem; color: var(--accent); font-weight: 600; margin-bottom: 8px; display: block; }
+    .meta { font-size: 0.8rem; color: var(--text-light); font-family: monospace; }
 
     .btn {
-      display: inline-block;
-      text-align: center;
-      padding: 10px 16px;
-      background: var(--primary);
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      border-radius: 6px;
-      transition: opacity 0.2s;
+      display: block; text-align: center;
+      padding: 12px; background: var(--primary); color: white;
+      text-decoration: none; font-weight: 600; font-size: 0.9rem;
+      border-radius: 4px; transition: background 0.2s;
     }
-    .btn:hover { opacity: 0.9; }
+    .btn:hover { background: #000; }
 
     /* Confidentialité */
-    .privacy-notice { background: #fffaf0; border: 1px solid #feebc8; }
-    .privacy-notice p { font-size: 0.95rem; margin-bottom: 12px; color: #744210; }
-    .privacy-notice ul { margin-left: 20px; font-size: 0.9rem; color: #744210; }
-    .privacy-notice li { margin-bottom: 4px; }
-    .important { color: #c05621; font-weight: 700; }
+    .confidential-box { background: #fff; border-left: 4px solid var(--danger); }
+    .confidential-box p { font-size: 0.95rem; margin-bottom: 10px; }
+    .confidential-box ul { margin-left: 18px; font-size: 0.9rem; }
+    .warn { color: var(--danger); font-weight: 700; }
 
     /* Formulaire */
-    form { display: flex; flex-direction: column; gap: 16px; }
+    form { display: flex; flex-direction: column; gap: 12px; }
     input, textarea {
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      background: #fcfcfc;
+      padding: 12px; border: 1px solid var(--border); border-radius: 4px;
+      font-family: inherit; font-size: 0.95rem; width: 100%;
     }
-    input:focus, textarea:focus { outline: 2px solid #bee3f8; border-color: var(--accent); }
-    .btn-submit { background: var(--accent); cursor: pointer; border: none; font-size: 1rem; padding: 14px; transition: background 0.2s; }
-    .btn-submit:hover { background: #2b6cb0; }
+    .btn-submit { background: var(--accent); border: none; color: white; cursor: pointer; font-weight: 700; padding: 14px; }
 
     @media (max-width: 600px) { .download-grid { grid-template-columns: 1fr; } }
   </style>
@@ -111,34 +95,32 @@
 
   <div class="container">
     <header>
-      <div class="badge">Accès Restreint</div>
-      <h1>Spy Game Beta</h1>
-      <p style="color: var(--text-light);">Portail officiel de distribution et de suivi technique</p>
+      <div class="status-tag">Système de Distribution Sécurisé</div>
+      <h1>Spy Game : Espace Testeurs</h1>
     </header>
 
-    <div class="section privacy-notice">
-      <h2>Accord de Confidentialité</h2>
-      <p>En accédant à ces ressources, vous acceptez les clauses de non-divulgation suivantes :</p>
+    <div class="section confidential-box">
+      <h2>Protocole de Confidentialité</h2>
+      <p>L'accès à cette plateforme implique l'acceptation des clauses suivantes :</p>
       <ul>
-        <li><span class="important">Propriété Exclusive :</span> Les fichiers fournis sont destinés à un usage de test interne uniquement.</li>
-        <li><span class="important">Confidentialité de l'URL :</span> Il est strictement interdit de partager l'adresse de ce portail.</li>
-        <li><span class="important">Non-Redistribution :</span> Aucun fichier ne doit être transmis à un tiers non autorisé.</li>
+        <li><span class="warn">Interdiction de diffusion :</span> Le partage de l'URL de ce site est proscrit.</li>
+        <li><span class="warn">Secret Professionnel :</span> Ne distribuez pas les fichiers binaires à des tiers.</li>
+        <li>Tout accès est monitoré pour garantir l'intégrité du projet.</li>
       </ul>
     </div>
 
     <div class="section">
-      <h2>Paquets de Déploiement</h2>
-      <div id="downloadGrid" class="download-grid">
-        <p style="color: var(--text-light); font-size: 0.9rem;">Synchronisation avec les serveurs de release...</p>
-      </div>
+      <h2>Packages de Déploiement</h2>
+      <div id="loader" style="text-align:center; color:var(--text-light); font-size:0.9rem;">Synchronisation des versions...</div>
+      <div id="downloadGrid" class="download-grid"></div>
     </div>
 
     <div class="section">
       <h2>Rapport de Feedback Technique</h2>
       <form id="feedbackForm">
-        <input type="text" id="versionTested" placeholder="Version installée (ex: v0.2 Windows)" required>
-        <textarea id="feedbackText" rows="5" placeholder="Décrivez les anomalies rencontrées ou vos observations techniques..." required></textarea>
-        <button type="submit" class="btn btn-submit">Soumettre le rapport</button>
+        <input type="text" id="ver" placeholder="Version installée (ex: v0.2 Windows)" required>
+        <textarea id="msg" rows="4" placeholder="Observations, rapports de bugs ou suggestions techniques..." required></textarea>
+        <button type="submit" class="btn btn-submit">Envoyer le rapport technique</button>
       </form>
     </div>
   </div>
@@ -147,100 +129,101 @@
     const CONFIG = {
       user: "celtmen-cpu",
       repo: "Spy-game-",
+      // Tes noms de fichiers exacts
+      targets: {
+        win: "windows_v0.2.zip",
+        lin: "Linux_v0.2.zip"
+      },
       webhooks: {
         win: "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp",
         lin: "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj"
       }
     };
 
-    // Récupération des données réelles depuis l'API GitHub
-    async function fetchReleases() {
-      const grid = document.getElementById('downloadGrid');
+    async function getAssets() {
       try {
         const response = await fetch(`https://api.github.com/repos/${CONFIG.user}/${CONFIG.repo}/releases`);
         const releases = await response.json();
+        document.getElementById('loader').style.display = 'none';
+        const grid = document.getElementById('downloadGrid');
         
-        if (!releases || releases.length === 0) {
-          grid.innerHTML = "<p>Aucune version disponible pour le moment.</p>";
-          return;
-        }
+        let found = { win: null, lin: null };
 
-        grid.innerHTML = ""; // Nettoyer le chargement
+        // Parcourir toutes les releases pour trouver les fichiers cibles
+        releases.forEach(rel => {
+          rel.assets.forEach(asset => {
+            if (asset.name === CONFIG.targets.win) found.win = { asset, tag: rel.tag_name };
+            if (asset.name === CONFIG.targets.lin) found.lin = { asset, tag: rel.tag_name };
+          });
+        });
 
-        // On prend les assets de la toute dernière release
-        const latestAssets = releases[0].assets;
-
-        latestAssets.forEach(asset => {
-          const isWin = asset.name.toLowerCase().includes('windows');
-          const isLin = asset.name.toLowerCase().includes('linux');
-
-          if (isWin || isLin) {
-            const platform = isWin ? "Windows" : "Linux";
-            const webhook = isWin ? CONFIG.webhooks.win : CONFIG.webhooks.lin;
-            const size = (asset.size / 1024 / 1024).toFixed(1);
-
+        // Affichage dynamique
+        Object.keys(found).forEach(key => {
+          if (found[key]) {
+            const item = found[key];
+            const platform = key === 'win' ? 'Windows' : 'Linux';
+            const size = (item.asset.size / 1024 / 1024).toFixed(1);
+            
             const card = document.createElement('div');
-            card.className = 'download-card';
+            card.className = 'card';
             card.innerHTML = `
-              <div class="os-title">${platform} Installer</div>
-              <div class="stats">
-                Version: ${releases[0].tag_name}<br>
-                Taille: ${size} MB<br>
-                <strong>Téléchargements réels: ${asset.download_count}</strong>
+              <div class="os-info">
+                <span class="version-tag">Build ${item.tag}</span>
+                <div class="os-name">${platform} Installer</div>
+                <div class="meta">
+                  Fichier: ${item.asset.name}<br>
+                  Poids: ${size} MB<br>
+                  <strong>Téléchargements: ${item.asset.download_count}</strong>
+                </div>
               </div>
-              <a href="${asset.browser_download_url}" class="btn" onclick="notifyDiscord('${webhook}', '${platform}')">Télécharger</a>
+              <a href="${item.asset.browser_download_url}" class="btn" onclick="notify('${key}')">Télécharger</a>
             `;
             grid.appendChild(card);
           }
         });
+
       } catch (err) {
-        grid.innerHTML = "<p>Erreur de connexion aux serveurs de distribution.</p>";
+        document.getElementById('loader').innerHTML = "Erreur de connexion aux serveurs GitHub.";
       }
     }
 
-    // Notification Discord instantanée
-    function notifyDiscord(url, os) {
+    function notify(key) {
+      const url = key === 'win' ? CONFIG.webhooks.win : CONFIG.webhooks.lin;
       fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           embeds: [{
-            title: "📥 Action de téléchargement",
-            description: `Un utilisateur a initié le téléchargement du package **${os}**.`,
-            color: 3066993,
+            title: "📥 Accès au package",
+            description: `Un testeur a lancé le téléchargement de la version **${key.toUpperCase()}**.`,
+            color: 242424,
             timestamp: new Date()
           }]
         })
       });
     }
 
-    // Envoi du formulaire (Anonyme)
     document.getElementById('feedbackForm').onsubmit = async (e) => {
       e.preventDefault();
-      const ver = document.getElementById('versionTested').value;
-      const msg = document.getElementById('feedbackText').value;
+      const v = document.getElementById('ver').value;
+      const m = document.getElementById('msg').value;
 
       await fetch(CONFIG.webhooks.win, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           embeds: [{
-            title: "📋 Nouveau Rapport Technique",
-            fields: [
-              { name: "Version", value: ver, inline: true },
-              { name: "Détails", value: msg }
-            ],
-            color: 3447003,
-            timestamp: new Date()
+            title: "📋 Rapport Technique (Anonyme)",
+            fields: [{name: "Version", value: v, inline: true}, {name: "Message", value: m}],
+            color: 242424, timestamp: new Date()
           }]
         })
       });
-
-      alert("Le rapport a été transmis à l'équipe technique.");
+      alert("Transmission réussie. Merci pour votre contribution.");
       e.target.reset();
     };
 
-    fetchReleases();
+    getAssets();
   </script>
 </body>
 </html>
