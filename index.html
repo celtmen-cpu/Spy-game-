@@ -11,30 +11,97 @@
     h1 { text-align: center; margin: 20px 0; font-size: 2.2em; color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; }
     h2 { width: 100%; max-width: 800px; font-size: 1.4em; color: #34495e; margin: 30px 0 15px; border-bottom: 2px solid #2980b9; padding-bottom: 8px; }
     p { margin-bottom: 20px; text-align: center; max-width: 600px; }
-    ul { list-style: none; width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 15px; }
-    li { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 15px; }
+    
+    #downloadList { list-style: none; width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
+    
+    li { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 15px; border: 1px solid white; }
+    
     .game-info { flex: 1; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.1em; }
     .platform-tag { font-size: 0.7em; background: #34495e; color: white; padding: 3px 10px; border-radius: 20px; }
+    
     .btn { padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1em; transition: 0.3s; text-align: center; background: #2980b9; color: #fff; border: none; cursor: pointer; }
     .btn:hover { background: #1abc9c; transform: scale(1.05); }
+
     .rules-card { background: white; border-left: 5px solid #e74c3c; padding: 20px; border-radius: 10px; max-width: 600px; width: 100%; margin: 20px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-    #reviewForm { width: 100%; max-width: 600px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 12px; }
+    
+    #reviewForm { width: 100%; max-width: 600px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
     #reviewForm input, #reviewForm textarea { padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; }
     #reviewForm button { padding: 12px; border-radius: 8px; border: none; background: #2c3e50; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
     #reviewForm button:hover { background: #34495e; }
+
     @media (max-width: 600px) { li { flex-direction: column; text-align: center; } .btn { width: 100%; } }
   </style>
 </head>
 <body>
 
-<script>
-  // ==========================================
-  // CONFIGURATION SPY GAME
-  // ==========================================
-  const CONFIG = {
-    nomDuJeu: "Spy Game",
-    platforms: {
-      windows: { label: "Spy Game pour Windows", lien: "https://github.com/celtmen-cpu/Spy-game-/releases/download/windows/windows_v0.2.zip" },
+  <h1>Spy Game</h1>
+  <p>Téléchargez la dernière version officielle du jeu pour votre plateforme.</p>
+
+  <h2>Plateformes disponibles</h2>
+  <ul id="downloadList">
+    </ul>
+
+  <div class="rules-card">
+    <strong>Note :</strong> Pour Android, vous devrez autoriser l'installation d'applications de sources inconnues dans vos paramètres si vous téléchargez l'APK.
+  </div>
+
+  <h2>Laisser un avis</h2>
+  <form id="reviewForm">
+    <input type="text" id="userName" placeholder="Votre nom" required>
+    <textarea id="userMessage" rows="4" placeholder="Votre message..." required></textarea>
+    <button type="submit">Envoyer l'avis</button>
+  </form>
+
+  <script>
+    // ==========================================
+    // CONFIGURATION GITHUB (MODIFIÉE)
+    // ==========================================
+    const GITHUB_CONFIG = {
+      user: "celtmen-cpu",
+      repo: "Spy-game-",
+      files: [
+        { 
+          name: "Windows (PC)", 
+          fileName: "SpyGame-Windows.zip", // <--- Vérifie que ton fichier s'appelle bien comme ça dans ta Release
+          tag: "Stable" 
+        },
+        { 
+          name: "Android (Mobile)", 
+          fileName: "SpyGame.apk",         // <--- Idem ici pour l'APK
+          tag: "Dernière version" 
+        }
+      ]
+    };
+
+    const listContainer = document.getElementById('downloadList');
+
+    // Génération automatique des liens
+    GITHUB_CONFIG.files.forEach(file => {
+      // Construction de l'URL vers la version la plus récente
+      const downloadUrl = `https://github.com/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/releases/latest/download/${file.fileName}`;
+      
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div class="game-info">
+          ${file.name} 
+          <span class="platform-tag">${file.tag}</span>
+        </div>
+        <a href="${downloadUrl}" class="btn">Télécharger</a>
+      `;
+      listContainer.appendChild(li);
+    });
+
+    // Gestion du formulaire
+    document.getElementById('reviewForm').onsubmit = (e) => {
+      e.preventDefault();
+      const name = document.getElementById('userName').value;
+      alert(`Merci ${name} ! Votre avis a bien été simulé.`);
+      e.target.reset();
+    };
+  </script>
+
+</body>
+</html>      windows: { label: "Spy Game pour Windows", lien: "https://github.com/celtmen-cpu/Spy-game-/releases/download/windows/windows_v0.2.zip" },
       linux: { label: "Spy Game pour Linux", lien: "versions/linux_0.2.tar.gz" },
       android: { label: "Spy Game Mobile (APK)", lien: "versions/android_0.2.apk" }
     },
