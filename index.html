@@ -3,191 +3,165 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spy Game - Accès Testeur</title>
+  <title>Spy Game - Accès Privé</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-      background-color: #f0f2f5; 
-      color: #1a202c; 
-      line-height: 1.5;
+      background-color: #f5f5f5; 
+      color: #333; 
       display: flex; 
       flex-direction: column; 
       align-items: center;
-      padding: 40px 20px;
+      padding: 50px 20px;
     }
 
-    .main-card {
+    .container {
       width: 100%;
-      max-width: 650px;
+      max-width: 600px;
       background: #ffffff;
-      padding: 35px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      padding: 30px;
+      border: 1px solid #ddd;
     }
 
-    h1 { font-size: 1.8rem; color: #2d3748; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #edf2f7; padding-bottom: 15px; }
+    h1 { font-size: 1.5rem; color: #000; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
 
-    h2 { font-size: 1.1rem; color: #4a5568; margin: 25px 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+    .alert-box { 
+      background-color: #fff3f3; 
+      border: 1px solid #ebccd1; 
+      padding: 15px; 
+      margin-bottom: 25px;
+      font-size: 0.9rem;
+    }
+    .alert-box strong { color: #a94442; text-transform: uppercase; }
+
+    h2 { font-size: 1rem; color: #666; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px; }
 
     /* Téléchargements */
-    .dl-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-    .dl-row { 
+    .file-row { 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      padding: 18px; 
-      background: #f8fafc; 
-      border: 1px solid #e2e8f0; 
-      border-radius: 8px; 
+      padding: 15px; 
+      border: 1px solid #eee; 
+      margin-bottom: 10px;
     }
-    .platform-label { font-weight: bold; font-size: 1rem; color: #2d3748; }
-    .version-label { font-size: 0.8rem; color: #718096; display: block; }
+    .file-name { font-weight: 600; font-size: 0.95rem; }
+    .file-name span { display: block; font-size: 0.8rem; color: #999; font-weight: normal; }
 
-    .btn-download { 
-      padding: 10px 22px; 
-      background-color: #3182ce; 
-      color: white; 
+    .btn { 
+      padding: 8px 16px; 
+      background-color: #333; 
+      color: #fff; 
       text-decoration: none; 
-      border-radius: 6px; 
-      font-weight: 600; 
-      font-size: 0.9rem;
-      transition: background 0.2s;
+      font-size: 0.85rem;
+      font-weight: bold;
       border: none;
       cursor: pointer;
     }
-    .btn-download:hover { background-color: #2b6cb0; }
-
-    /* Sécurité / CGU */
-    .security-notice { 
-      background-color: #fffaf0; 
-      border-left: 4px solid #ed8936; 
-      padding: 15px; 
-      border-radius: 4px; 
-      margin-bottom: 20px;
-    }
-    .security-notice p { font-size: 0.95rem; color: #744210; margin-bottom: 10px; }
-    .security-notice ul { margin-left: 20px; font-size: 0.9rem; color: #744210; }
-    .important { font-weight: bold; text-decoration: underline; }
+    .btn:hover { background-color: #000; }
 
     /* Formulaire Rapport */
-    .report-form { display: flex; flex-direction: column; gap: 15px; }
+    form { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
     input, textarea { 
-      padding: 12px; 
-      border: 1px solid #cbd5e0; 
-      border-radius: 6px; 
+      padding: 10px; 
+      border: 1px solid #ccc; 
       font-family: inherit; 
-      font-size: 1rem;
+      font-size: 0.9rem;
       width: 100%;
     }
-    input:focus, textarea:focus { outline: 2px solid #3182ce; border-color: transparent; }
-    
     .btn-submit { 
-      padding: 14px; 
-      background-color: #2d3748; 
+      padding: 12px; 
+      background-color: #555; 
       color: white; 
       border: none; 
-      border-radius: 6px; 
       font-weight: bold; 
       cursor: pointer; 
-      transition: opacity 0.2s;
     }
-    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:hover { background-color: #333; }
 
-    @media (max-width: 500px) {
-      .dl-row { flex-direction: column; text-align: center; gap: 15px; }
-      .btn-download { width: 100%; }
-    }
+    @media (max-width: 500px) { .file-row { flex-direction: column; gap: 10px; text-align: center; } }
   </style>
 </head>
 <body>
 
-  <div class="main-card">
-    <h1>Spy Game - Terminal Beta</h1>
+  <div class="container">
+    <h1>Spy Game :: Beta Terminal</h1>
 
-    <h2>1. Accès aux versions Beta</h2>
-    <div class="dl-container">
-      <div class="dl-row">
-        <div>
-          <span class="platform-label">Windows</span>
-          <span class="version-label">Fichier : windows_v0.2.zip</span>
-        </div>
-        <a href="https://github.com/celtmen-cpu/Spy-game-/releases/latest/download/windows_v0.2.zip" class="btn-download" onclick="notify('win')">Télécharger</a>
-      </div>
-
-      <div class="dl-row">
-        <div>
-          <span class="platform-label">Linux</span>
-          <span class="version-label">Fichier : Linux_v0.2.zip</span>
-        </div>
-        <a href="https://github.com/celtmen-cpu/Spy-game-/releases/latest/download/Linux_v0.2.zip" class="btn-download" onclick="notify('lin')">Télécharger</a>
-      </div>
+    <div class="alert-box">
+      <strong>Protocole de Sécurité :</strong>
+      <p style="margin-top:5px;">Ce site et les fichiers associés sont strictement confidentiels. Il est interdit de partager ce lien ou de redistribuer le logiciel à des tiers.</p>
     </div>
 
-    <h2>2. Protocole de Confidentialité</h2>
-    <div class="security-notice">
-      <p>Ce projet est sous <span class="important">secret strict</span>. En accédant à ces fichiers, vous vous engagez à :</p>
-      <ul>
-        <li>Ne <span class="important">jamais partager le lien</span> de ce site à un tiers.</li>
-        <li>Ne pas distribuer ou donner les fichiers du jeu.</li>
-        <li>Garder tout le contenu de la Beta privé.</li>
-      </ul>
+    <h2>1. Extraire les fichiers (v0.2)</h2>
+    
+    <div class="file-row">
+      <div class="file-name">
+        Version Windows
+        <span>Fichier: windows_v0.2.zip</span>
+      </div>
+      <a href="https://github.com/celtmen-cpu/Spy-game-/releases/download/v0.2/windows_v0.2.zip" class="btn" onclick="notify('WINDOWS')">TELECHARGER</a>
     </div>
 
-    <h2>3. Rapport de Test (Anonyme)</h2>
-    <form id="reportForm" class="report-form">
-      <input type="text" id="verTested" placeholder="Version testée (ex: Windows v0.2)" required>
-      <textarea id="feedback" rows="4" placeholder="Description du bug rencontré ou avis..." required></textarea>
-      <button type="submit" class="btn-submit">Envoyer le rapport</button>
+    <div class="file-row">
+      <div class="file-name">
+        Version Linux
+        <span>Fichier: Linux_v0.2.zip</span>
+      </div>
+      <a href="https://github.com/celtmen-cpu/Spy-game-/releases/download/v0.2/Linux_v0.2.zip" class="btn" onclick="notify('LINUX')">TELECHARGER</a>
+    </div>
+
+    <h2>2. Rapport de test (Anonyme)</h2>
+    <form id="reportForm">
+      <input type="text" id="ver" placeholder="Version testée (ex: Windows v0.2)" required>
+      <textarea id="msg" rows="4" placeholder="Détails du rapport ou bugs rencontrés..." required></textarea>
+      <button type="submit" class="btn-submit">Envoyer le rapport de mission</button>
     </form>
   </div>
 
   <script>
-    const WEBHOOK_WIN = "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp";
-    const WEBHOOK_LIN = "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj";
+    const WEB_WIN = "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp";
+    const WEB_LIN = "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj";
 
-    // Notification de téléchargement
     function notify(os) {
-      const url = (os === 'win') ? WEBHOOK_WIN : WEBHOOK_LIN;
+      const url = (os === 'WINDOWS') ? WEB_WIN : WEB_LIN;
       fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           embeds: [{ 
-            title: "📥 Nouveau téléchargement", 
-            description: `Un testeur a récupéré la version **${os.toUpperCase()}**.`, 
-            color: 3447003, 
+            title: "🕵️ Activité Beta", 
+            description: `Téléchargement initié pour : **${os}**.`, 
+            color: 3355443, 
             timestamp: new Date() 
           }]
         })
       });
     }
 
-    // Envoi du rapport
     document.getElementById('reportForm').onsubmit = async (e) => {
       e.preventDefault();
-      const ver = document.getElementById('verTested').value;
-      const msg = document.getElementById('feedback').value;
+      const v = document.getElementById('ver').value;
+      const m = document.getElementById('msg').value;
 
-      // On envoie le rapport sur le webhook Windows par défaut
-      await fetch(WEBHOOK_WIN, {
+      await fetch(WEB_WIN, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           embeds: [{ 
-            title: "💬 Rapport Beta v0.2 reçu", 
+            title: "💬 Rapport de Testeur reçu", 
             fields: [
-              { name: "Version", value: ver, inline: true },
-              { name: "Message", value: msg }
+              { name: "Version", value: v, inline: true },
+              { name: "Rapport", value: m }
             ], 
-            color: 15105570,
+            color: 0,
             timestamp: new Date()
           }]
         })
       });
 
-      alert("Rapport envoyé avec succès. Merci pour votre aide.");
+      alert("Rapport transmis avec succès.");
       e.target.reset();
     };
   </script>
