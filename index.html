@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spy Game - Hub de Téléchargement</title>
+  <title>Spy Game - Espace Joueurs</title>
   <style>
     :root {
       --primary: #0f172a;
@@ -12,6 +12,7 @@
       --card: #ffffff;
       --text: #334155;
       --border: #e2e8f0;
+      --success: #10b981;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,52 +30,56 @@
     .container { width: 100%; max-width: 800px; }
 
     header { text-align: center; margin-bottom: 40px; }
-    h1 { font-size: 1.8rem; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+    h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+    .emoji-header { font-size: 2rem; display: block; margin-bottom: 10px; }
 
     .section {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 30px;
       margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
-    h2 { font-size: 0.85rem; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; }
+    h2 { font-size: 0.9rem; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
 
-    .note-text { font-size: 0.95rem; line-height: 1.6; color: var(--text); }
-    .highlight { color: var(--primary); font-weight: 600; }
+    .welcome-text { font-size: 1.05rem; line-height: 1.6; color: var(--text); }
+    .highlight { color: var(--accent); font-weight: 700; }
 
     .download-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     
     .card {
       border: 1px solid var(--border);
       padding: 24px;
-      border-radius: 6px;
+      border-radius: 10px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: border-color 0.2s;
+      transition: all 0.2s ease;
+      background: linear-gradient(to bottom right, #ffffff, #f8fafc);
     }
-    .card:hover { border-color: var(--accent); }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
 
-    .os-name { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 5px; }
-    .file-info { font-size: 0.85rem; color: #64748b; margin-bottom: 20px; font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .os-name { font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-bottom: 5px; }
+    .file-info { font-size: 0.85rem; color: #64748b; margin-bottom: 20px; font-family: ui-monospace, monospace; }
 
     .btn {
       display: block; text-align: center;
-      padding: 12px; background: var(--primary); color: white;
-      text-decoration: none; font-weight: 600; font-size: 0.9rem;
-      border-radius: 4px; transition: background 0.2s;
+      padding: 14px; background: var(--primary); color: white;
+      text-decoration: none; font-weight: 700; font-size: 0.95rem;
+      border-radius: 6px; transition: background 0.2s;
     }
-    .btn:hover { background: #000; }
+    .btn:hover { background: var(--accent); }
 
     form { display: flex; flex-direction: column; gap: 15px; }
     input, textarea {
-      padding: 12px; border: 1px solid var(--border); border-radius: 4px;
-      font-family: inherit; font-size: 0.95rem; width: 100%; background: #fcfcfc;
+      padding: 14px; border: 1px solid var(--border); border-radius: 8px;
+      font-family: inherit; font-size: 1rem; width: 100%; background: #fcfcfc; transition: border-color 0.2s;
     }
-    .btn-submit { background: var(--accent); color: white; font-weight: 700; padding: 14px; border: none; cursor: pointer; border-radius: 4px; }
+    input:focus, textarea:focus { outline: none; border-color: var(--accent); background: white; }
+    .btn-submit { background: var(--success); color: white; font-weight: 700; padding: 14px; border: none; cursor: pointer; border-radius: 8px; font-size: 1rem; transition: opacity 0.2s; }
+    .btn-submit:hover { opacity: 0.9; }
 
     @media (max-width: 600px) { .download-grid { grid-template-columns: 1fr; } }
   </style>
@@ -83,29 +88,31 @@
 
   <div class="container">
     <header>
+      <span class="emoji-header">🚀</span>
       <h1>Spy Game</h1>
     </header>
 
     <div class="section">
-      <h2>Note d'usage</h2>
-      <p class="note-text">
-        Ce projet est actuellement en phase de test privé. Nous vous remercions de <span class="highlight">maintenir la confidentialité du contenu</span> et de ne pas partager ces accès. <br><br>
-        Nous espérons que l'expérience vous plaira. <span class="highlight">Bon divertissement.</span>
+      <h2>Bienvenue !</h2>
+      <p class="welcome-text">
+        C'est un plaisir de vous accueillir sur l'espace de test de <span class="highlight">Spy Game</span>. <br><br>
+        Téléchargez la version de votre choix ci-dessous et lancez-vous dans l'aventure. Votre aide est précieuse pour rendre le jeu encore meilleur ! <br><br>
+        <span class="highlight">Amusez-vous bien et bonne découverte !</span>
       </p>
     </div>
 
     <div class="section">
-      <h2>Versions disponibles</h2>
-      <div id="loader" style="text-align:center; font-size:0.9rem; color:#94a3b8;">Recherche des fichiers sur les serveurs...</div>
+      <h2>Prêt à jouer ?</h2>
+      <div id="loader" style="text-align:center; font-size:0.9rem; color:#94a3b8;">Récupération des dernières versions...</div>
       <div id="downloadGrid" class="download-grid"></div>
     </div>
 
     <div class="section">
-      <h2>Rapport de test</h2>
+      <h2>Votre avis compte</h2>
       <form id="feedbackForm">
-        <input type="text" id="ver" placeholder="Version testée" required>
-        <textarea id="msg" rows="4" placeholder="Votre rapport..." required></textarea>
-        <button type="submit" class="btn-submit">Envoyer le rapport</button>
+        <input type="text" id="ver" placeholder="Quelle version avez-vous testée ?" required>
+        <textarea id="msg" rows="4" placeholder="Qu'avez-vous pensé du jeu ? Un bug à signaler ?" required></textarea>
+        <button type="submit" class="btn-submit">Envoyer mon retour</button>
       </form>
     </div>
   </div>
@@ -163,12 +170,11 @@
         });
 
         if (!assetsFound.win && !assetsFound.lin) {
-            document.getElementById('loader').style.display = 'block';
-            document.getElementById('loader').innerText = "Aucun fichier v0.2 trouvé sur GitHub.";
+            document.getElementById('loader').innerText = "Les fichiers arrivent bientôt !";
         }
 
       } catch (e) {
-        document.getElementById('loader').innerText = "Erreur de connexion.";
+        document.getElementById('loader').innerText = "Connexion aux serveurs momentanément indisponible.";
       }
     }
 
@@ -182,9 +188,9 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           embeds: [{
-            title: `📥 Téléchargement : ${label}`,
-            fields: [{ name: "Nombre de téléchargements", value: `📈 ${total}`, inline: true }],
-            color: 3447003,
+            title: `🎮 Nouveau joueur sur ${label}`,
+            fields: [{ name: "Total des téléchargements", value: `✨ ${total}`, inline: true }],
+            color: 3066993,
             timestamp: new Date()
           }]
         })
@@ -200,13 +206,13 @@
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           embeds: [{
-            title: "📋 Rapport reçu",
-            fields: [{name: "Version", value: v, inline: true}, {name: "Message", value: m}],
-            color: 3447003, timestamp: new Date()
+            title: "📣 Nouveau retour joueur",
+            fields: [{name: "Version", value: v, inline: true}, {name: "Feedback", value: m}],
+            color: 15844367, timestamp: new Date()
           }]
         })
       });
-      alert("Rapport envoyé.");
+      alert("Génial, merci pour votre retour !");
       e.target.reset();
     };
 
