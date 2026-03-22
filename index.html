@@ -42,6 +42,9 @@
 
     h2 { font-size: 0.85rem; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; }
 
+    .note-text { font-size: 0.95rem; line-height: 1.6; color: var(--text); }
+    .highlight { color: var(--primary); font-weight: 600; }
+
     .download-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     
     .card {
@@ -84,6 +87,14 @@
     </header>
 
     <div class="section">
+      <h2>Note d'usage</h2>
+      <p class="note-text">
+        Ce projet est actuellement en phase de test privé. Nous vous remercions de <span class="highlight">maintenir la confidentialité du contenu</span> et de ne pas partager ces accès. <br><br>
+        Nous espérons que l'expérience vous plaira. <span class="highlight">Bon divertissement.</span>
+      </p>
+    </div>
+
+    <div class="section">
       <h2>Versions disponibles</h2>
       <div id="loader" style="text-align:center; font-size:0.9rem; color:#94a3b8;">Recherche des fichiers sur les serveurs...</div>
       <div id="downloadGrid" class="download-grid"></div>
@@ -120,16 +131,13 @@
         
         let assetsFound = { win: null, lin: null };
 
-        // Scan de toutes les releases pour trouver les fichiers
         releases.forEach(rel => {
           rel.assets.forEach(asset => {
             const name = asset.name.toLowerCase();
-            // Détection flexible pour Windows
             if (name.includes('windows') && name.includes('0.2')) {
               assetsFound.win = asset;
               counts.win = asset.download_count;
             }
-            // Détection flexible pour Linux (gère "Linux v0.2", "linux_v0.2", etc.)
             if (name.includes('linux') && name.includes('0.2')) {
               assetsFound.lin = asset;
               counts.lin = asset.download_count;
@@ -137,7 +145,6 @@
           });
         });
 
-        // Génération des cartes
         ['win', 'lin'].forEach(key => {
           if (assetsFound[key]) {
             const data = assetsFound[key];
