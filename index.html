@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spy Game - Espace Joueurs</title>
   <style>
-    /* --- Ton ancien CSS ici --- */
     :root {
       --primary: #0f172a;
       --accent: #2563eb;
@@ -87,148 +86,106 @@
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <span class="emoji-header">🚀</span>
-      <h1>Spy Game</h1>
-    </header>
+<div class="container">
+  <header>
+    <span class="emoji-header">🚀</span>
+    <h1>Spy Game</h1>
+  </header>
 
-    <div class="section">
-      <h2>Bienvenue !</h2>
-      <p class="welcome-text">
-        C'est un plaisir de vous accueillir sur l'espace de test de <span class="highlight">Spy Game</span>. <br><br>
-        Téléchargez la version de votre choix ci-dessous et lancez-vous dans l'aventure. Votre aide est précieuse pour rendre le jeu encore meilleur ! <br><br>
-        <span class="highlight">Amusez-vous bien et bonne découverte !</span>
-      </p>
-    </div>
-
-    <div class="section">
-      <h2>Prêt à jouer ?</h2>
-      <div id="loader" style="text-align:center; font-size:0.9rem; color:#94a3b8;">Récupération des dernières versions...</div>
-      <div id="downloadGrid" class="download-grid"></div>
-    </div>
-
-    <div class="section">
-      <h2>Votre avis compte</h2>
-      <form id="feedbackForm">
-        <input type="text" id="ver" placeholder="Quelle version avez-vous testée ?" required>
-        <textarea id="msg" rows="4" placeholder="Qu'avez-vous pensé du jeu ? Un bug à signaler ?" required></textarea>
-        <button type="submit" class="btn-submit">Envoyer mon retour</button>
-      </form>
-    </div>
+  <div class="section">
+    <h2>Bienvenue !</h2>
+    <p class="welcome-text">
+      C'est un plaisir de vous accueillir sur l'espace de test de <span class="highlight">Spy Game</span>. <br><br>
+      Téléchargez la version de votre choix ci-dessous et lancez-vous dans l'aventure. Votre aide est précieuse pour rendre le jeu encore meilleur ! <br><br>
+      <span class="highlight">Amusez-vous bien et bonne découverte !</span>
+    </p>
   </div>
 
-  <script>
-    const CONFIG = {
-      user: "celtmen-cpu",
-      repo: "Spy-game-",
-      releaseInput: "https://github.com/celtmen-cpu/Spy-game-/releases/download/windows/windows_v0.3.zip", // ← Mets ici le nom ou le lien complet de la release
-      webhooks: {
-        win: "https://discord.com/api/webhooks/1484975628146184243/...",
-        lin: "https://discord.com/api/webhooks/1484976674318586188/..."
-      }
-    };
+  <div class="section">
+    <h2>Prêt à jouer ?</h2>
+    <div id="downloadGrid" class="download-grid"></div>
+  </div>
 
-    let counts = { win: 0, lin: 0 };
+  <div class="section">
+    <h2>Votre avis compte</h2>
+    <form id="feedbackForm">
+      <input type="text" id="ver" placeholder="Quelle version avez-vous testée ?" required>
+      <textarea id="msg" rows="4" placeholder="Qu'avez-vous pensé du jeu ? Un bug à signaler ?" required></textarea>
+      <button type="submit" class="btn-submit">Envoyer mon retour</button>
+    </form>
+  </div>
+</div>
 
-    async function init() {
-      try {
-        const res = await fetch(`https://api.github.com/repos/${CONFIG.user}/${CONFIG.repo}/releases`);
-        const releases = await res.json();
-        document.getElementById('loader').style.display = 'none';
-        const grid = document.getElementById('downloadGrid');
-
-        let assetsFound = { win: null, lin: null };
-
-        // Si c'est un lien complet GitHub, on prend le dernier segment comme tag
-        let targetName = CONFIG.releaseInput;
-        if (targetName.includes("github.com")) {
-          const parts = targetName.split("/");
-          targetName = parts[parts.length-1];
-        }
-
-        // Cherche la release correspondante
-        const targetRelease = releases.find(r => r.tag_name === targetName || r.name === targetName);
-
-        if (targetRelease) {
-          targetRelease.assets.forEach(asset => {
-            const name = asset.name.toLowerCase();
-            if (name.includes('windows')) {
-              assetsFound.win = asset;
-              counts.win = asset.download_count;
-            } else if (name.includes('linux')) {
-              assetsFound.lin = asset;
-              counts.lin = asset.download_count;
-            }
-          });
-        }
-
-        ['win','lin'].forEach(key => {
-          if (assetsFound[key]) {
-            const data = assetsFound[key];
-            const title = key === 'win' ? 'Version Windows' : 'Version Linux';
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-              <div>
-                <div class="os-name">${title}</div>
-                <div class="file-info">${data.name}</div>
-              </div>
-              <a href="${data.browser_download_url}" class="btn" onclick="track('${key}')">Télécharger</a>
-            `;
-            grid.appendChild(card);
-          }
-        });
-
-        if (!assetsFound.win && !assetsFound.lin) {
-          document.getElementById('loader').innerText = "Aucun fichier trouvé pour cette release.";
-        }
-
-      } catch (e) {
-        console.error(e);
-        document.getElementById('loader').innerText = "Connexion aux serveurs momentanément indisponible.";
-      }
+<script>
+  const CONFIG = {
+    windowsLink: "LIEN_WINDOWS_ICI", // ← Mets ici le lien direct de la release Windows
+    linuxLink: "LIEN_LINUX_ICI",     // ← Mets ici le lien direct de la release Linux
+    webhooks: {
+      win: "https://discord.com/api/webhooks/1484975628146184243/...",
+      lin: "https://discord.com/api/webhooks/1484976674318586188/..."
     }
+  };
 
-    function track(key) {
-      const total = counts[key] + 1;
-      const url = key === 'win' ? CONFIG.webhooks.win : CONFIG.webhooks.lin;
-      const label = key === 'win' ? 'WINDOWS' : 'LINUX';
+  let counts = { win: 0, lin: 0 };
 
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          embeds: [{
-            title: `🎮 Nouveau joueur sur ${label}`,
-            fields: [{ name: "Total des téléchargements", value: `✨ ${total}`, inline: true }],
-            color: 3066993,
-            timestamp: new Date()
-          }]
-        })
-      });
-    }
+  function createCard(os, link) {
+    const title = os === "win" ? "Version Windows" : "Version Linux";
+    const name = link.split("/").pop();
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div>
+        <div class="os-name">${title}</div>
+        <div class="file-info">${name}</div>
+      </div>
+      <a href="${link}" class="btn" onclick="track('${os}')">Télécharger</a>
+    `;
+    document.getElementById("downloadGrid").appendChild(card);
+  }
 
-    document.getElementById('feedbackForm').onsubmit = async (e) => {
-      e.preventDefault();
-      const v = document.getElementById('ver').value;
-      const m = document.getElementById('msg').value;
-      await fetch(CONFIG.webhooks.win, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          embeds: [{
-            title: "📣 Nouveau retour joueur",
-            fields: [{name: "Version", value: v, inline: true}, {name: "Feedback", value: m}],
-            color: 15844367, timestamp: new Date()
-          }]
-        })
-      });
-      alert("Génial, merci pour votre retour !");
-      e.target.reset();
-    };
+  function track(key) {
+    const total = counts[key] + 1;
+    const url = key === "win" ? CONFIG.webhooks.win : CONFIG.webhooks.lin;
+    const label = key === "win" ? "WINDOWS" : "LINUX";
 
-    init();
-  </script>
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        embeds: [{
+          title: `🎮 Nouveau joueur sur ${label}`,
+          fields: [{ name: "Total des téléchargements", value: `✨ ${total}`, inline: true }],
+          color: 3066993,
+          timestamp: new Date()
+        }]
+      })
+    });
+  }
+
+  // Crée les cartes avec les liens
+  if (CONFIG.windowsLink) createCard("win", CONFIG.windowsLink);
+  if (CONFIG.linuxLink) createCard("lin", CONFIG.linuxLink);
+
+  // Feedback form
+  document.getElementById("feedbackForm").onsubmit = async (e) => {
+    e.preventDefault();
+    const v = document.getElementById("ver").value;
+    const m = document.getElementById("msg").value;
+    await fetch(CONFIG.webhooks.win, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        embeds: [{
+          title: "📣 Nouveau retour joueur",
+          fields: [{ name: "Version", value: v, inline: true }, { name: "Feedback", value: m }],
+          color: 15844367, timestamp: new Date()
+        }]
+      })
+    });
+    alert("Génial, merci pour votre retour !");
+    e.target.reset();
+  };
+</script>
+
 </body>
 </html>
