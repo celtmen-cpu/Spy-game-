@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spy Game - Espace Joueurs</title>
   <style>
+    /* --- Ton ancien CSS ici --- */
     :root {
       --primary: #0f172a;
       --accent: #2563eb;
@@ -121,10 +122,10 @@
     const CONFIG = {
       user: "celtmen-cpu",
       repo: "Spy-game-",
-      releaseName: "0.3", // ← METS ICI LA RELEASE QUE TU VEUX
+      releaseInput: "https://github.com/celtmen-cpu/Spy-game-/releases/download/untagged-007fc2e492d03cbfdee3/windows_v0.3.zip", // ← Mets ici le nom ou le lien complet de la release
       webhooks: {
-        win: "https://discord.com/api/webhooks/1484975628146184243/auZz9JbjNXfJU7wKMpRBwp5XbuPo0EzZkmnyCWGhEMOH7moKZL2pzV4idMlb2N63CtRp",
-        lin: "https://discord.com/api/webhooks/1484976674318586188/fQVJ8dY89xbSnyTZgroufuI9-k8hXz-JU0CLRcU2SvqDH3RHYXfOUzRp8EVyTtX7GaNj"
+        win: "https://discord.com/api/webhooks/1484975628146184243/...",
+        lin: "https://discord.com/api/webhooks/1484976674318586188/..."
       }
     };
 
@@ -139,8 +140,15 @@
 
         let assetsFound = { win: null, lin: null };
 
-        // Cherche la release exacte
-        const targetRelease = releases.find(r => r.tag_name === CONFIG.releaseName || r.name === CONFIG.releaseName);
+        // Si c'est un lien complet GitHub, on prend le dernier segment comme tag
+        let targetName = CONFIG.releaseInput;
+        if (targetName.includes("github.com")) {
+          const parts = targetName.split("/");
+          targetName = parts[parts.length-1];
+        }
+
+        // Cherche la release correspondante
+        const targetRelease = releases.find(r => r.tag_name === targetName || r.name === targetName);
 
         if (targetRelease) {
           targetRelease.assets.forEach(asset => {
