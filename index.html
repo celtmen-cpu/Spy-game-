@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spy Game - Espace Joueurs</title>
+  <link rel="icon" type="image/png" href="icon.png"> <!-- Icône du site -->
   <style>
     :root {
       --primary: #0f172a;
@@ -118,12 +119,13 @@
 
 <script>
   const CONFIG = {
-    windowsLink: "https://github.com/celtmen-cpu/Spy-game-/releases/download/windows/windows_v0.3.zip", // ← Mets ici le lien direct de la release Windows
-    linuxLink: "https://github.com/celtmen-cpu/Spy-game-/releases/download/0.3/linux_v0.3.zip",     // ← Mets ici le lien direct de la release Linux
+    windowsLink: "https://github.com/celtmen-cpu/Spy-game-/releases/download/windows/windows_v0.3.zip",
+    linuxLink: "https://github.com/celtmen-cpu/Spy-game-/releases/download/0.3/linux_v0.3.zip",
     webhooks: {
       win: "https://discord.com/api/webhooks/1484975628146184243/...",
       lin: "https://discord.com/api/webhooks/1484976674318586188/..."
-    }
+    },
+    iconLink: "main/icon.png" // Chemin vers ton icône (optionnel si tu veux l'utiliser ailleurs)
   };
 
   let counts = { win: 0, lin: 0 };
